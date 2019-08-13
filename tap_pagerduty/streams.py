@@ -23,13 +23,13 @@ class PagerdutyStream():
         return inspect.getattr_static(self, key, default=None)
 
 
-    def get_abs_path(self, path: str):
+    def _get_abs_path(self, path: str):
         return os.path.join(os.path.dirname(os.path.realpath(__file__)), path)
 
 
     def load_schema(self):
         """Loads a schema file for a given Pagerduty resource."""
-        schema_path = self.get_abs_path("schemas")
+        schema_path = self._get_abs_path("schemas")
         return singer.utils.load_json(f"{schema_path}/{self.tap_stream_id}.json")
 
 
@@ -59,7 +59,7 @@ class PagerdutyStream():
         return response.json()
 
 
-    def list_resource(self, url_suffix: str, params: dict = None):
+    def _list_resource(self, url_suffix: str, params: dict = None):
         response = self._get(url_suffix=url_suffix, params=params)
         return PagerdutyResponse(self, url_suffix, params, response)
 
@@ -67,7 +67,7 @@ class PagerdutyStream():
     def sync(self):
         with singer.metrics.job_timer(job_type=f"list_{self.tap_stream_id}") as timer:
             with singer.metrics.record_counter(endpoint=self.tap_stream_id) as counter:
-                for page in self.list_resource(url_suffix=f"/{self.tap_stream_id}", params=self.params):
+                for page in self._list_resource(url_suffix=f"/{self.tap_stream_id}", params=self.params):
                     for incident in page.get(self.tap_stream_id):
                         with singer.Transformer() as transformer:
                             transformed_record = transformer.transform(data=incident, schema=self.schema)
@@ -110,7 +110,6 @@ class PagerdutyResponse:
 class IncidentsStream(PagerdutyStream):
     tap_stream_id = 'incidents'
     stream = 'IncidentsStream'
-    selected = True
     key_properties = 'id'
     replication_key = 'created_at'
     valid_replication_keys = ['created_at']
@@ -131,7 +130,53 @@ class IncidentsStream(PagerdutyStream):
                                                               valid_replication_keys=self.valid_replication_keys,
                                                               replication_method=self.replication_method)
 
+class ServicesStream(PagerdutyStream):
+    tap_stream_id = 'services'
+    stream = 'ServicesStream'
+    key_properties = 'id'
+    replication_key = 'created_at'
+    valid_replication_keys = ['created_at']
+    replication_method = 'INCREMENTAL'
+
+    def __init__(self, token, email, **kwargs):
+        super().__init__(token, email)
+        self.params = {
+            "limit": kwargs.get("limit", 100),
+            "offset": kwargs.get("offset", 0)
+        }
+        self.schema = self.load_schema()
+        self.metadata = singer.metadata.get_standard_metadata(schema=self.load_schema(),
+                                                              key_properties=self.key_properties,
+                                                              valid_replication_keys=self.valid_replication_keys,
+                                                              replication_method=self.replication_method)
+
+
+class NotificationsStream(PagerdutyStream):
+    tap_stream_id = 'notifications'
+    stream = 'NotificationsStream'
+    key_properties = 'id'
+    replication_key = 'started_at'
+    valid_replication_keys = ['started_at']
+    replication_method = 'INCREMENTAL'
+
+    def __init__(self, token, email, **kwargs):
+        super().__init__(token, email)
+        self.params = {
+            "limit": kwargs.get("limit", 100),
+            "offset": kwargs.get("offset", 0),
+            "since": kwargs.get("since", "2019-08-01"),
+            "until": kwargs.get("until", "2019-09-01")
+        }
+        self.schema = self.load_schema()
+        self.metadata = singer.metadata.get_standard_metadata(schema=self.load_schema(),
+                                                              key_properties=self.key_properties,
+                                                              valid_replication_keys=self.valid_replication_keys,
+                                                              replication_method=self.replication_method)
+
+
 
 AVAILABLE_STREAMS = [
-    IncidentsStream
+    IncidentsStream,
+    ServicesStream,
+    NotificationsStream
 ]

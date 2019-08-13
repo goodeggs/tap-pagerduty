@@ -1,0 +1,197 @@
+{
+  "type": ["null", "object"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": ["null", "string"]
+    },
+    "type": {
+      "type": ["null", "string"]
+    },
+    "summary": {
+      "type": ["null", "string"]
+    },
+    "self": {
+      "type": ["null", "string"]
+    },
+    "html_url": {
+      "type": ["null", "string"]
+    },
+    "name": {
+      "type": ["null", "string"]
+    },
+    "description": {
+      "type": ["null", "string"]
+    },
+    "auto_resolve_timeout": {
+      "type": ["null", "integer"]
+    },
+    "acknowledgement_timeout": {
+      "type": ["null", "integer"]
+    },
+    "created_at": {
+      "type": ["null", "string"],
+      "format": "date-time"
+    },
+    "status": {
+      "type": ["null", "string"]
+    },
+    "last_incident_timestamp": {
+      "type": ["null", "string"],
+      "format": "date-time"
+    },
+    "alert_creation": {
+      "type": ["null", "string"]
+    },
+    "alert_grouping": {
+      "type": ["null", "string"]
+    },
+    "alert_grouping_timeout": {
+      "type": ["null", "integer"]
+    },
+    "integrations": {
+      "type": ["null", "array"],
+      "items": {
+        "type": ["null", "object"],
+        "properties": {
+          "id": {
+            "type": ["null", "string"]
+          },
+          "type": {
+            "type": ["null", "string"]
+          },
+          "summary": {
+            "type": ["null", "string"]
+          },
+          "self": {
+            "type": ["null", "string"]
+          },
+          "html_url": {
+            "type": ["null", "string"]
+          }
+        }
+      }
+    },
+    "escalation_policy": {
+      "type": ["null", "object"],
+      "properties": {
+        "id": {
+          "type": ["null", "string"]
+        },
+        "type": {
+          "type": ["null", "string"]
+        },
+        "summary": {
+          "type": ["null", "string"]
+        },
+        "self": {
+          "type": ["null", "string"]
+        },
+        "html_url": {
+          "type": ["null", "string"]
+        }
+      }
+    },
+    "teams": {
+      "type": ["null", "array"],
+      "items": {
+        "type": ["null", "object"],
+        "properties": {
+          "id": {
+            "type": ["null", "string"]
+          },
+          "type": {
+            "type": ["null", "string"]
+          },
+          "summary": {
+            "type": ["null", "string"]
+          },
+          "self": {
+            "type": ["null", "string"]
+          },
+          "html_url": {
+            "type": ["null", "string"]
+          }
+        }
+      }
+    },
+    "incident_urgency_rule": {
+      "type": ["null", "object"],
+      "properties": {
+        "type": {
+          "type": ["null", "string"]
+        },
+        "during_support_hours": {
+          "type": ["null", "object"],
+          "properties": {
+            "type": {
+              "type": ["null", "string"]
+            },
+            "urgency": {
+              "type": ["null", "string"]
+            }
+          }
+        },
+        "outside_support_hours": {
+          "type": ["null", "object"],
+          "properties": {
+            "type": {
+              "type": ["null", "string"]
+            },
+            "urgency": {
+              "type": ["null", "string"]
+            }
+          }
+        }
+      }
+    },
+    "support_hours": {
+      "type": ["null", "object"],
+      "properties": {
+        "type": {
+          "type": ["null", "string"]
+        },
+        "time_zone": {
+          "type": ["null", "string"]
+        },
+        "start_time": {
+          "type": ["null", "string"]
+        },
+        "end_time": {
+          "type": ["null", "string"]
+        },
+        "days_of_week": {
+          "type": ["null", "array"],
+          "items": {
+            "type": ["null", "integer"]
+          }
+        }
+      }
+    },
+    "scheduled_actions": {
+      "type": ["null", "array"],
+      "items": {
+        "type": ["null", "object"],
+        "properties": {
+          "type": {
+            "type": ["null", "string"]
+          },
+          "at": {
+            "type": ["null", "object"],
+            "properties": {
+              "type": {
+                "type": ["null", "string"]
+              },
+              "name": {
+                "type": ["null", "string"]
+              }
+            }
+          },
+          "to_urgency": {
+            "type": ["null", "string"]
+          }
+        }
+      }
+    }
+  }
+}

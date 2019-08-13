@@ -10,12 +10,12 @@ from .streams import AVAILABLE_STREAMS
 LOGGER = singer.get_logger()
 
 
-def discover():
+def discover(config):
     LOGGER.info('Starting discovery..')
     data = {}
     data['streams'] = []
     for stream in AVAILABLE_STREAMS:
-        data['streams'].append(stream())
+        data['streams'].append(stream(token=config.get('token'), email=config.get('email')))
     catalog = singer.catalog.Catalog.from_dict(data=data)
     singer.catalog.write_catalog(catalog)
     LOGGER.info('Finished discovery..')
@@ -34,15 +34,10 @@ def sync(config, catalog, state):
         stream.write_schema()
         stream.sync()
 
-
-
-
-
-
 def main():
     args = singer.utils.parse_args(required_config_keys=["token", "email"])
     if args.discover:
-        discover()
+        discover(config=args.config)
     else:
         sync(config=args.config, catalog=args.catalog, state=args.state)
 
