@@ -1,5 +1,7 @@
 # tap-pagerduty
 A [Singer](https://www.singer.io/) tap for extracting data from the [Pagerduty REST API v2](https://v2.developer.pagerduty.com/docs/rest-api).
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![Python Versions](https://img.shields.io/badge/python-3.6%20%7C%203.7-blue.svg)](https://pypi.python.org/pypi/ansicolortags/)
 
 ## Installation
 
@@ -26,10 +28,10 @@ $ deactivate
 ### Install Singer Target
 
 ```bash
-python3 -m venv ~/.venvs/target-stitch
-source ~/.venvs/target-stitch/bin/activate
-pip3 install target-stitch
-deactivate
+$ python3 -m venv ~/.venvs/target-stitch
+$ source ~/.venvs/target-stitch/bin/activate
+$ pip3 install target-stitch
+$ deactivate
 ```
 
 ## Configuration
@@ -78,13 +80,13 @@ The current version of the tap syncs three distinct [Streams](https://github.com
 Singer taps describe the data that a stream supports via a [Discovery](https://github.com/singer-io/getting-started/blob/master/docs/DISCOVERY_MODE.md#discovery-mode) process. You can run the Pagerduty tap in Discovery mode by passing the `--discover` flag at runtime:
 
 ```bash
-~/.venvs/tap-pagerduty/bin/tap-pagerduty --config=config/pagerduty.config.json --discover
+$ ~/.venvs/tap-pagerduty/bin/tap-pagerduty --config=config/pagerduty.config.json --discover
 ```
 
 The tap will generate a [Catalog](https://github.com/singer-io/getting-started/blob/master/docs/DISCOVERY_MODE.md#the-catalog) to stdout. To pass the Catalog to a file instead, simply redirect it to a file:
 
 ```bash
-~/.venvs/tap-pagerduty/bin/tap-pagerduty --config=config/pagerduty.config.json --discover > catalog.json
+$ ~/.venvs/tap-pagerduty/bin/tap-pagerduty --config=config/pagerduty.config.json --discover > catalog.json
 ```
 
 ## Sync Locally
@@ -92,21 +94,21 @@ The tap will generate a [Catalog](https://github.com/singer-io/getting-started/b
 Running a tap in [Sync mode](https://github.com/singer-io/getting-started/blob/master/docs/SYNC_MODE.md#sync-mode) will extract data from the various Streams. In order to run a tap in Sync mode, pass a configuration file and catalog file:
 
 ```bash
-~/.venvs/tap-pagerduty/bin/tap-pagerduty --config=config/pagerduty.config.json --catalog=catalog.json
+$ ~/.venvs/tap-pagerduty/bin/tap-pagerduty --config=config/pagerduty.config.json --catalog=catalog.json
 ```
 
 The tap will emit occasional [State messages](https://github.com/singer-io/getting-started/blob/master/docs/SPEC.md#state-message). You can persist State between runs by redirecting State to a file:
 
 ```bash
-~/.venvs/tap-pagerduty/bin/tap-pagerduty --config=config/pagerduty.config.json --catalog=catalog.json >> state.json
-tail -1 state.json > state.json.tmp
-mv state.json.tmp state.json
+$ ~/.venvs/tap-pagerduty/bin/tap-pagerduty --config=config/pagerduty.config.json --catalog=catalog.json >> state.json
+$ tail -1 state.json > state.json.tmp
+$ mv state.json.tmp state.json
 ```
 
 To pick up from where the tap left off on subsequent runs, simply supply the [State file](https://github.com/singer-io/getting-started/blob/master/docs/CONFIG_AND_STATE.md#state-file) at runtime:
 
 ```bash
-~/.venvs/tap-pagerduty/bin/tap-pagerduty --config=config/pagerduty.config.json --catalog=catalog.json --state=state.json >> state.json
+$ ~/.venvs/tap-pagerduty/bin/tap-pagerduty --config=config/pagerduty.config.json --catalog=catalog.json --state=state.json >> state.json
 ```
 
 ## Sync to Stitch
