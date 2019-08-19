@@ -1,5 +1,7 @@
-# Singer configuration files
+# Singer files
 .config/
+catalog.json
+state.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
