@@ -10,17 +10,17 @@ Since package dependencies tend to conflict between various taps and targets, Si
 If you haven't already, clone the `tap-pagerduty` repo:
 
 ```bash
-git clone git@github.com:goodeggs/tap-pagerduty.git
+$ git clone git@github.com:goodeggs/tap-pagerduty.git
 ```
 
 Then install the tap:
 
 ```bash
-cd tap-pagerduty
-python3 -m venv ~/.venvs/tap-pagerduty
-source ~/.venvs/tap-pagerduty/bin/activate
-pip3 install .
-deactivate
+$ cd tap-pagerduty
+$ python3 -m venv ~/.venvs/tap-pagerduty
+$ source ~/.venvs/tap-pagerduty/bin/activate
+$ pip3 install .
+$ deactivate
 ```
 
 ### Install Singer Target
