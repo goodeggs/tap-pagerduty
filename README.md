@@ -10,19 +10,11 @@ Since package dependencies tend to conflict between various taps and targets, Si
 
 ### Install Pagerduty Tap
 
-If you haven't already, clone the `tap-pagerduty` repo:
-
-```bash
-$ git clone git@github.com:goodeggs/tap-pagerduty.git
-```
-
-Then install the tap:
-
 ```bash
 $ cd tap-pagerduty
 $ python3 -m venv ~/.venvs/tap-pagerduty
 $ source ~/.venvs/tap-pagerduty/bin/activate
-$ pip3 install .
+$ pip3 install tap-pagerduty
 $ deactivate
 ```
 
@@ -110,10 +102,29 @@ To pick up from where the tap left off on subsequent runs, simply supply the [St
 
 ```bash
 $ ~/.venvs/tap-pagerduty/bin/tap-pagerduty --config=config/pagerduty.config.json --catalog=catalog.json --state=state.json >> state.json
+$ tail -1 state.json > state.json.tmp
+$ mv state.json.tmp state.json
 ```
 
 ## Sync to Stitch
 
+You can also send the output of the tap to [Stitch Data](https://www.stitchdata.com/) for loading into the data warehouse. To do this, first create a JSON-formatted configuration for Stitch. This configuration file has two required fields:
+1. `client_id`: The ID associated with the Stitch Data account you'll be sending data to.
+2. `token` The token associated with the specific [Import API integration](https://www.stitchdata.com/docs/integrations/import-api/) within the Stitch Data account.
+
+An example configuration file will look as follows:
+
+```json
+{
+  "client_id": 1234,
+  "token": "foobarfoobar"
+}
+```
+
+Once the configuration file is created, simply pipe the output of the tap to the Stitch Data target and supply the target with the newly created configuration file:
+
 ```bash
-make tap-sync-stitch
+$ ~/.venvs/tap-pagerduty/bin/tap-pagerduty --config=config/pagerduty.config.json --catalog=catalog.json --state=state.json | ~/.venvs/target-stitch/bin/target-stitch --config=config/stitch.config.json >> state.json
+$ tail -1 state.json > state.json.tmp
+$ mv state.json.tmp state.json
 ```
