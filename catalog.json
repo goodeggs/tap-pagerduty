@@ -2,7 +2,7 @@
   "streams": [
     {
       "tap_stream_id": "incidents",
-      "replication_key": "created_at",
+      "replication_key": "last_status_change_at",
       "replication_method": "INCREMENTAL",
       "key_properties": "id",
       "schema": {
@@ -375,7 +375,7 @@
             "selected": true,
             "forced-replication-method": "INCREMENTAL",
             "valid-replication-keys": [
-              "created_at"
+              "last_status_change_at"
             ],
             "inclusion": "available"
           }
@@ -564,6 +564,725 @@
           "breadcrumb": [
             "properties",
             "conference_bridge"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        }
+      ]
+    },
+    {
+      "tap_stream_id": "services",
+      "replication_key": "created_at",
+      "replication_method": "INCREMENTAL",
+      "key_properties": "id",
+      "schema": {
+        "properties": {
+          "id": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "type": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "summary": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "self": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "html_url": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "name": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "description": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "auto_resolve_timeout": {
+            "type": [
+              "null",
+              "integer"
+            ]
+          },
+          "acknowledgement_timeout": {
+            "type": [
+              "null",
+              "integer"
+            ]
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "status": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "last_incident_timestamp": {
+            "format": "date-time",
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "alert_creation": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "alert_grouping": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "alert_grouping_timeout": {
+            "type": [
+              "null",
+              "integer"
+            ]
+          },
+          "integrations": {
+            "items": {
+              "properties": {
+                "id": {
+                  "type": [
+                    "null",
+                    "string"
+                  ]
+                },
+                "type": {
+                  "type": [
+                    "null",
+                    "string"
+                  ]
+                },
+                "summary": {
+                  "type": [
+                    "null",
+                    "string"
+                  ]
+                },
+                "self": {
+                  "type": [
+                    "null",
+                    "string"
+                  ]
+                },
+                "html_url": {
+                  "type": [
+                    "null",
+                    "string"
+                  ]
+                }
+              },
+              "type": [
+                "null",
+                "object"
+              ]
+            },
+            "type": [
+              "null",
+              "array"
+            ]
+          },
+          "escalation_policy": {
+            "properties": {
+              "id": {
+                "type": [
+                  "null",
+                  "string"
+                ]
+              },
+              "type": {
+                "type": [
+                  "null",
+                  "string"
+                ]
+              },
+              "summary": {
+                "type": [
+                  "null",
+                  "string"
+                ]
+              },
+              "self": {
+                "type": [
+                  "null",
+                  "string"
+                ]
+              },
+              "html_url": {
+                "type": [
+                  "null",
+                  "string"
+                ]
+              }
+            },
+            "type": [
+              "null",
+              "object"
+            ]
+          },
+          "teams": {
+            "items": {
+              "properties": {
+                "id": {
+                  "type": [
+                    "null",
+                    "string"
+                  ]
+                },
+                "type": {
+                  "type": [
+                    "null",
+                    "string"
+                  ]
+                },
+                "summary": {
+                  "type": [
+                    "null",
+                    "string"
+                  ]
+                },
+                "self": {
+                  "type": [
+                    "null",
+                    "string"
+                  ]
+                },
+                "html_url": {
+                  "type": [
+                    "null",
+                    "string"
+                  ]
+                }
+              },
+              "type": [
+                "null",
+                "object"
+              ]
+            },
+            "type": [
+              "null",
+              "array"
+            ]
+          },
+          "incident_urgency_rule": {
+            "properties": {
+              "type": {
+                "type": [
+                  "null",
+                  "string"
+                ]
+              },
+              "during_support_hours": {
+                "properties": {
+                  "type": {
+                    "type": [
+                      "null",
+                      "string"
+                    ]
+                  },
+                  "urgency": {
+                    "type": [
+                      "null",
+                      "string"
+                    ]
+                  }
+                },
+                "type": [
+                  "null",
+                  "object"
+                ]
+              },
+              "outside_support_hours": {
+                "properties": {
+                  "type": {
+                    "type": [
+                      "null",
+                      "string"
+                    ]
+                  },
+                  "urgency": {
+                    "type": [
+                      "null",
+                      "string"
+                    ]
+                  }
+                },
+                "type": [
+                  "null",
+                  "object"
+                ]
+              }
+            },
+            "type": [
+              "null",
+              "object"
+            ]
+          },
+          "support_hours": {
+            "properties": {
+              "type": {
+                "type": [
+                  "null",
+                  "string"
+                ]
+              },
+              "time_zone": {
+                "type": [
+                  "null",
+                  "string"
+                ]
+              },
+              "start_time": {
+                "type": [
+                  "null",
+                  "string"
+                ]
+              },
+              "end_time": {
+                "type": [
+                  "null",
+                  "string"
+                ]
+              },
+              "days_of_week": {
+                "items": {
+                  "type": [
+                    "null",
+                    "integer"
+                  ]
+                },
+                "type": [
+                  "null",
+                  "array"
+                ]
+              }
+            },
+            "type": [
+              "null",
+              "object"
+            ]
+          },
+          "scheduled_actions": {
+            "items": {
+              "properties": {
+                "type": {
+                  "type": [
+                    "null",
+                    "string"
+                  ]
+                },
+                "at": {
+                  "properties": {
+                    "type": {
+                      "type": [
+                        "null",
+                        "string"
+                      ]
+                    },
+                    "name": {
+                      "type": [
+                        "null",
+                        "string"
+                      ]
+                    }
+                  },
+                  "type": [
+                    "null",
+                    "object"
+                  ]
+                },
+                "to_urgency": {
+                  "type": [
+                    "null",
+                    "string"
+                  ]
+                }
+              },
+              "type": [
+                "null",
+                "object"
+              ]
+            },
+            "type": [
+              "null",
+              "array"
+            ]
+          }
+        },
+        "type": [
+          "null",
+          "object"
+        ],
+        "additionalProperties": false
+      },
+      "stream": "ServicesStream",
+      "metadata": [
+        {
+          "breadcrumb": [],
+          "metadata": {
+            "table-key-properties": "id",
+            "selected": true,
+            "forced-replication-method": "INCREMENTAL",
+            "valid-replication-keys": [
+              "created_at"
+            ],
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "id"
+          ],
+          "metadata": {
+            "inclusion": "automatic"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "type"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "summary"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "self"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "html_url"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "name"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "description"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "auto_resolve_timeout"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "acknowledgement_timeout"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "created_at"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "status"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "last_incident_timestamp"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "alert_creation"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "alert_grouping"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "alert_grouping_timeout"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "integrations"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "escalation_policy"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "teams"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "incident_urgency_rule"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "support_hours"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "scheduled_actions"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        }
+      ]
+    },
+    {
+      "tap_stream_id": "notifications",
+      "replication_key": "started_at",
+      "replication_method": "INCREMENTAL",
+      "key_properties": "id",
+      "schema": {
+        "properties": {
+          "id": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "type": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "started_at": {
+            "format": "date-time",
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "address": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "user": {
+            "properties": {
+              "id": {
+                "type": [
+                  "null",
+                  "string"
+                ]
+              },
+              "type": {
+                "type": [
+                  "null",
+                  "string"
+                ]
+              },
+              "summary": {
+                "type": [
+                  "null",
+                  "string"
+                ]
+              },
+              "self": {
+                "type": [
+                  "null",
+                  "string"
+                ]
+              },
+              "html_url": {
+                "type": [
+                  "null",
+                  "string"
+                ]
+              }
+            },
+            "type": [
+              "null",
+              "object"
+            ]
+          }
+        },
+        "type": [
+          "null",
+          "object"
+        ],
+        "additionalProperties": false
+      },
+      "stream": "NotificationsStream",
+      "metadata": [
+        {
+          "breadcrumb": [],
+          "metadata": {
+            "table-key-properties": "id",
+            "selected": true,
+            "forced-replication-method": "INCREMENTAL",
+            "valid-replication-keys": [
+              "started_at"
+            ],
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "id"
+          ],
+          "metadata": {
+            "inclusion": "automatic"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "type"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "started_at"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "address"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "user"
           ],
           "metadata": {
             "inclusion": "available"

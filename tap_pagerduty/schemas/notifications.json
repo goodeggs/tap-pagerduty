@@ -1,0 +1,39 @@
+{
+  "type": ["null", "object"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": ["null", "string"]
+    },
+    "type": {
+      "type": ["null", "string"]
+    },
+    "started_at": {
+      "type": ["null", "string"],
+      "format": "date-time"
+    },
+    "address": {
+      "type": ["null", "string"]
+    },
+    "user": {
+      "type": ["null", "object"],
+      "properties": {
+        "id": {
+          "type": ["null", "string"]
+        },
+        "type": {
+          "type": ["null", "string"]
+        },
+        "summary": {
+          "type": ["null" ,"string"]
+        },
+        "self": {
+          "type": ["null", "string"]
+        },
+        "html_url": {
+          "type": ["null", "string"]
+        }
+      }
+    }
+  }
+}

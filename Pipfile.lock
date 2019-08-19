@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "ecaa3080df4367382d6f490617df674a724923bc7047a42147b2421bfbb60092"
+            "sha256": "a1db1dc94ee93b652f6baed3aa0a63565158694f403506c69430ee8b4f0be46e"
         },
         "pipfile-spec": 6,
         "requires": {},
@@ -16,9 +16,10 @@
     "default": {
         "backoff": {
             "hashes": [
-                "sha256:608cd3c17c7ae541fb45454cf8236271d13f3cdae932e56879f26bd737344aa8"
+                "sha256:c7187f15339e775aec926dc6e5e42f8a3ad7d3c2b9a6ecae7b535000f70cd838",
+                "sha256:d340bb6f36d025c04214b8925112d8456970e5f28dda46e4f1133bf5c622cb0a"
             ],
-            "version": "==1.3.2"
+            "version": "==1.8.0"
         },
         "certifi": {
             "hashes": [
@@ -86,10 +87,10 @@
         },
         "singer-python": {
             "hashes": [
-                "sha256:05afc91ca4ba746ec79b342a91964267197d53d2c101d22be7ab1f28b164603f"
+                "sha256:d17b3d7a01c2844e4f32c5ce9e8d4395ea700d5ce5c5c5f53c584a73fe414a2f"
             ],
             "index": "pypi",
-            "version": "==5.6.1"
+            "version": "==5.7.0"
         },
         "six": {
             "hashes": [
