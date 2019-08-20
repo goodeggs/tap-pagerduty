@@ -9,8 +9,8 @@ singer-python = "==5.7.0"
 
 [dev-packages]
 flake8 = "*"
+pytest = "*"
 
 [requires]
 
 [pipenv]
-allow_prereleases = true

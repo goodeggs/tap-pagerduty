@@ -34,7 +34,7 @@ setuptools.setup(
     ],
     keywords="singer tap python pagerduty",
     license='GPLv3',
-    packages=setuptools.find_packages(exclude=['tap_pagerduty_tests']),
+    packages=setuptools.find_packages(exclude=['tests']),
     package_data={
         'tap_pagerduty': ['schemas/*.json']
     },
@@ -43,7 +43,8 @@ setuptools.setup(
         'singer-python==5.7.0'
     ],
     tests_require=[
-        'flake8'
+        'flake8',
+        'pytest'
     ],
     python_requires='>=3.6',
     entry_points={
