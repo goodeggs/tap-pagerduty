@@ -1,7 +1,7 @@
 import inspect
 import os
-from datetime import datetime
 import time
+from datetime import datetime
 from typing import Dict
 
 import requests
