@@ -4,11 +4,11 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-requests = "==2.22.0"
-singer-python = "==5.7.0"
 
 [dev-packages]
 tox = "*"
+isort = "*"
+flake8 = "*"
 
 [requires]
 
