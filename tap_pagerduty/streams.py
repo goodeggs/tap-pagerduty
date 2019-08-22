@@ -1,13 +1,12 @@
-from datetime import datetime
-from dateutil import tz
-import os
-import time
 import inspect
+import os
+from datetime import datetime
+import time
 from typing import Dict
 
 import requests
 import singer
-
+from dateutil import tz
 
 LOGGER = singer.get_logger()
 

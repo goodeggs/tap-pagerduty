@@ -2,7 +2,6 @@ import singer
 
 from .streams import AVAILABLE_STREAMS
 
-
 LOGGER = singer.get_logger()
 
 
