@@ -85,7 +85,7 @@ class PagerdutyStream:
         headers = self._construct_headers()
         response = requests.get(url, headers=headers, params=params)
         if response.status_code == 429:
-            LOGGER.info("Rate limit reached. Trying again in 60 seconds.")
+            LOGGER.warn("Rate limit reached. Trying again in 60 seconds.")
             time.sleep(60)
             response = requests.get(url, headers=headers, params=params)
         response.raise_for_status()
@@ -97,13 +97,15 @@ class PagerdutyStream:
 
     def sync(self):
         if self.replication_method == 'INCREMENTAL':
-            bookmark = singer.bookmarks.get_bookmark(state=self.state,
-                                                     tap_stream_id=self.tap_stream_id,
-                                                     key=self.replication_key,
-                                                     default=None)
-
-            if bookmark is not None:
-                self.params.update({"since": f"{self.replication_key}>={bookmark}"})
+            current_bookmark = singer.bookmarks.get_bookmark(state=self.state,
+                                                             tap_stream_id=self.tap_stream_id,
+                                                             key=self.replication_key,
+                                                             default=None)
+            if current_bookmark is not None:
+                self.params.update({"since": f"{self.replication_key}>{current_bookmark}"})
+                running_bookmark_dtime = datetime.strptime(current_bookmark, '%Y-%m-%dT%H:%M:%SZ')
+            else:
+                running_bookmark_dtime = None
 
         with singer.metrics.job_timer(job_type=f"list_{self.tap_stream_id}"):
             with singer.metrics.record_counter(endpoint=self.tap_stream_id) as counter:
@@ -112,9 +114,15 @@ class PagerdutyStream:
                         with singer.Transformer() as transformer:
                             transformed_record = transformer.transform(data=record, schema=self.schema)
                             singer.write_record(stream_name=self.stream, time_extracted=singer.utils.now(), record=transformed_record)
-                            if self.replication_method == 'INCREMENTAL':
-                                singer.utils.update_state(state=self.state, entity=self.tap_stream_id, dtime=record.get(self.replication_key))
                             counter.increment()
+                            if self.replication_method == 'INCREMENTAL':
+                                record_bookmark_dtime = datetime.strptime(record.get(self.replication_key), '%Y-%m-%dT%H:%M:%SZ')
+                                if (running_bookmark_dtime is None) or (record_bookmark_dtime > running_bookmark_dtime):
+                                    running_bookmark_dtime = record_bookmark_dtime
+                                    singer.bookmarks.write_bookmark(state=self.state,
+                                                                    tap_stream_id=self.tap_stream_id,
+                                                                    key=self.replication_key,
+                                                                    val=record.get(self.replication_key))
 
 
 class PagerdutyResponse:
@@ -155,7 +163,7 @@ class IncidentsStream(PagerdutyStream):
     key_properties = 'id'
     replication_key = 'last_status_change_at'
     valid_replication_keys = ['last_status_change_at']
-    replication_method = 'INCREMENTAL'
+    replication_method = 'FULL_TABLE'
     valid_params = [
         'since',
         'until',
@@ -182,7 +190,7 @@ class ServicesStream(PagerdutyStream):
     key_properties = 'id'
     replication_key = 'created_at'
     valid_replication_keys = ['created_at']
-    replication_method = 'INCREMENTAL'
+    replication_method = 'FULL_TABLE'
     valid_params = [
         'team_ids[]',
         'time_zone',
