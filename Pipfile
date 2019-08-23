@@ -6,9 +6,11 @@ name = "pypi"
 [packages]
 
 [dev-packages]
-tox = "*"
+tap-pagerduty = {path = ".", editable = true}
 isort = "*"
 flake8 = "*"
+pytest = "*"
+tox = "*"
 
 [requires]
 

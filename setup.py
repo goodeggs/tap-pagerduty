@@ -42,10 +42,6 @@ setuptools.setup(
         'requests==2.22.0',
         'singer-python==5.7.0'
     ],
-    tests_require=[
-        'flake8',
-        'pytest'
-    ],
     python_requires='>=3.6',
     entry_points={
         'console_scripts': ['tap-pagerduty = tap_pagerduty:main']
