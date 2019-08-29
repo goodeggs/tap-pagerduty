@@ -22,7 +22,7 @@ class PagerdutyStream:
         self.params = {
             "limit": config.get('limit', 100),
             "offset": 0,
-            "since": f"{self.replication_key}>={config.get('since')}",
+            "since": config.get('since'),
             "time_zone": config.get('time_zone', 'UTC')
         }
         self.schema = self.load_schema()
@@ -79,7 +79,7 @@ class PagerdutyStream:
         headers["From"] = self.email
         return headers
 
-    def _get(self, url_suffix: str, params: dict = None) -> Dict:
+    def _get(self, url_suffix: str, params: Dict = None) -> Dict:
         url = self.BASE_URL + url_suffix
         headers = self._construct_headers()
         response = requests.get(url, headers=headers, params=params)
@@ -89,6 +89,13 @@ class PagerdutyStream:
             response = requests.get(url, headers=headers, params=params)
         response.raise_for_status()
         return response.json()
+
+    def update_bookmark(self, bookmark, value):
+        if bookmark is None:
+            new_bookmark = value
+        else:
+            new_bookmark = max(bookmark, value)
+        return new_bookmark
 
     def _list_resource(self, url_suffix: str, params: Dict = None):
         response = self._get(url_suffix=url_suffix, params=params)
@@ -100,8 +107,14 @@ class PagerdutyStream:
                                                              tap_stream_id=self.tap_stream_id,
                                                              key=self.replication_key,
                                                              default=None)
+
             if current_bookmark is not None:
-                self.params.update({"since": f"{self.replication_key}>{current_bookmark}"})
+                current_bookmark_dtime = datetime.strptime(current_bookmark, '%Y-%m-%dT%H:%M:%SZ')
+            else:
+                current_bookmark_dtime = None
+
+            if current_bookmark is not None:
+                self.params.update({"since": current_bookmark})
                 running_bookmark_dtime = datetime.strptime(current_bookmark, '%Y-%m-%dT%H:%M:%SZ')
             else:
                 running_bookmark_dtime = None
@@ -162,7 +175,7 @@ class IncidentsStream(PagerdutyStream):
     key_properties = 'id'
     replication_key = 'last_status_change_at'
     valid_replication_keys = ['last_status_change_at']
-    replication_method = 'FULL_TABLE'
+    replication_method = 'INCREMENTAL'
     valid_params = [
         'since',
         'until',
@@ -182,13 +195,41 @@ class IncidentsStream(PagerdutyStream):
     def __init__(self, config, state, **kwargs):
         super().__init__(config, state)
 
+    def sync(self):
+        current_bookmark = singer.bookmarks.get_bookmark(state=self.state,
+                                                         tap_stream_id=self.tap_stream_id,
+                                                         key=self.replication_key,
+                                                         default=None)
+
+        if current_bookmark is not None:
+            current_bookmark_dtime = datetime.strptime(current_bookmark, '%Y-%m-%dT%H:%M:%SZ')
+        else:
+            current_bookmark_dtime = None
+
+        running_bookmark_dtime = None
+        with singer.metrics.job_timer(job_type=f"list_{self.tap_stream_id}"):
+            with singer.metrics.record_counter(endpoint=self.tap_stream_id) as counter:
+                for page in self._list_resource(url_suffix=f"/{self.tap_stream_id}", params=self.params):
+                    for record in page.get(self.tap_stream_id):
+                        record_replication_key_dtime = datetime.strptime(record.get(self.replication_key), '%Y-%m-%dT%H:%M:%SZ')
+                        if (current_bookmark_dtime is None) or (record_replication_key_dtime >= current_bookmark_dtime):
+                            with singer.Transformer() as transformer:
+                                transformed_record = transformer.transform(data=record, schema=self.schema)
+                                singer.write_record(stream_name=self.stream, time_extracted=singer.utils.now(), record=transformed_record)
+                                counter.increment()
+                                running_bookmark_dtime = update_bookmark(running_bookmark_dtime, record_replication_key_dtime)
+                                singer.bookmarks.write_bookmark(state=self.state,
+                                                                tap_stream_id=self.tap_stream_id,
+                                                                key=self.replication_key,
+                                                                val=record.get(self.replication_key))
+
+
 
 class ServicesStream(PagerdutyStream):
     tap_stream_id = 'services'
     stream = 'ServicesStream'
     key_properties = 'id'
-    replication_key = 'created_at'
-    valid_replication_keys = ['created_at']
+    valid_replication_keys = []
     replication_method = 'FULL_TABLE'
     valid_params = [
         'team_ids[]',

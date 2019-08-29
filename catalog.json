@@ -3,7 +3,7 @@
     {
       "tap_stream_id": "incidents",
       "replication_key": "last_status_change_at",
-      "replication_method": "INCREMENTAL",
+      "replication_method": "FULL_TABLE",
       "key_properties": "id",
       "schema": {
         "properties": {
@@ -373,10 +373,7 @@
           "metadata": {
             "table-key-properties": "id",
             "selected": true,
-            "forced-replication-method": "INCREMENTAL",
-            "valid-replication-keys": [
-              "last_status_change_at"
-            ],
+            "forced-replication-method": "FULL_TABLE",
             "inclusion": "available"
           }
         },
@@ -573,8 +570,7 @@
     },
     {
       "tap_stream_id": "services",
-      "replication_key": "created_at",
-      "replication_method": "INCREMENTAL",
+      "replication_method": "FULL_TABLE",
       "key_properties": "id",
       "schema": {
         "properties": {
@@ -954,10 +950,7 @@
           "metadata": {
             "table-key-properties": "id",
             "selected": true,
-            "forced-replication-method": "INCREMENTAL",
-            "valid-replication-keys": [
-              "created_at"
-            ],
+            "forced-replication-method": "FULL_TABLE",
             "inclusion": "available"
           }
         },
