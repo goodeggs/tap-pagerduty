@@ -6,7 +6,6 @@ from typing import Dict
 
 import requests
 import singer
-from dateutil import tz
 
 LOGGER = singer.get_logger()
 
@@ -46,7 +45,6 @@ class PagerdutyStream:
                     self.params.update({"until": datetime.strftime(datetime.utcnow(), '%Y-%m-%dT%H:%M:%SZ')})
                 else:
                     raise RuntimeError(f"Parameter '{param}' required but not supplied for /{self.tap_stream_id} endpoint.")
-
 
     def get(self, key: str):
         '''Custom get method so that Singer can
@@ -101,41 +99,6 @@ class PagerdutyStream:
     def _list_resource(self, url_suffix: str, params: Dict = None):
         response = self._get(url_suffix=url_suffix, params=params)
         return PagerdutyResponse(self, url_suffix, params, response)
-
-    def sync(self):
-        if self.replication_method == 'INCREMENTAL':
-            current_bookmark = singer.bookmarks.get_bookmark(state=self.state,
-                                                             tap_stream_id=self.tap_stream_id,
-                                                             key=self.replication_key,
-                                                             default=None)
-
-            if current_bookmark is not None:
-                current_bookmark_dtime = datetime.strptime(current_bookmark, '%Y-%m-%dT%H:%M:%SZ')
-            else:
-                current_bookmark_dtime = None
-
-            if current_bookmark is not None:
-                self.params.update({"since": current_bookmark})
-                running_bookmark_dtime = datetime.strptime(current_bookmark, '%Y-%m-%dT%H:%M:%SZ')
-            else:
-                running_bookmark_dtime = None
-
-        with singer.metrics.job_timer(job_type=f"list_{self.tap_stream_id}"):
-            with singer.metrics.record_counter(endpoint=self.tap_stream_id) as counter:
-                for page in self._list_resource(url_suffix=f"/{self.tap_stream_id}", params=self.params):
-                    for record in page.get(self.tap_stream_id):
-                        with singer.Transformer() as transformer:
-                            transformed_record = transformer.transform(data=record, schema=self.schema)
-                            singer.write_record(stream_name=self.stream, time_extracted=singer.utils.now(), record=transformed_record)
-                            counter.increment()
-                            if self.replication_method == 'INCREMENTAL':
-                                record_bookmark_dtime = datetime.strptime(record.get(self.replication_key), '%Y-%m-%dT%H:%M:%SZ')
-                                if (running_bookmark_dtime is None) or (record_bookmark_dtime > running_bookmark_dtime):
-                                    running_bookmark_dtime = record_bookmark_dtime
-                                    singer.bookmarks.write_bookmark(state=self.state,
-                                                                    tap_stream_id=self.tap_stream_id,
-                                                                    key=self.replication_key,
-                                                                    val=record.get(self.replication_key))
 
 
 class PagerdutyResponse:
@@ -209,7 +172,6 @@ class IncidentsStream(PagerdutyStream):
 
         since_dtime = datetime.strptime(self.params.get("since"), '%Y-%m-%dT%H:%M:%SZ')
         until_dtime = datetime.strptime(self.params.get("until"), '%Y-%m-%dT%H:%M:%SZ')
-        days_diff = until_dtime - since_dtime
         request_range_limit = timedelta(days=179)
 
         running_bookmark_dtime = None
@@ -217,7 +179,7 @@ class IncidentsStream(PagerdutyStream):
             with singer.metrics.record_counter(endpoint=self.tap_stream_id) as counter:
                 while since_dtime < until_dtime:
                     range = {
-                        "offset": 0, # Reset the offset each time.
+                        "offset": 0,  # Reset the offset each time.
                         "since": datetime.strftime(since_dtime, '%Y-%m-%dT%H:%M:%SZ'),
                         "until": datetime.strftime(min(since_dtime + request_range_limit, until_dtime), '%Y-%m-%dT%H:%M:%SZ')
                     }
@@ -239,7 +201,6 @@ class IncidentsStream(PagerdutyStream):
                                         tap_stream_id=self.tap_stream_id,
                                         key=self.replication_key,
                                         val=running_bookmark_str)
-
 
 
 class ServicesStream(PagerdutyStream):
@@ -298,7 +259,6 @@ class NotificationsStream(PagerdutyStream):
 
         since_dtime = datetime.strptime(self.params.get("since"), '%Y-%m-%dT%H:%M:%SZ')
         until_dtime = datetime.strptime(self.params.get("until"), '%Y-%m-%dT%H:%M:%SZ')
-        days_diff = until_dtime - since_dtime
         request_range_limit = timedelta(days=89)
 
         running_bookmark_dtime = None
@@ -306,7 +266,7 @@ class NotificationsStream(PagerdutyStream):
             with singer.metrics.record_counter(endpoint=self.tap_stream_id) as counter:
                 while since_dtime < until_dtime:
                     range = {
-                        "offset": 0, # Reset the offset each time.
+                        "offset": 0,  # Reset the offset each time.
                         "since": datetime.strftime(since_dtime, '%Y-%m-%dT%H:%M:%SZ'),
                         "until": datetime.strftime(min(since_dtime + request_range_limit, until_dtime), '%Y-%m-%dT%H:%M:%SZ')
                     }
