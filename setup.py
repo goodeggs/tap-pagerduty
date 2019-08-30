@@ -22,7 +22,6 @@ setuptools.setup(
     long_description=readme,
     long_description_content_type='text/markdown',
     classifiers=[
-        'Development Status :: 1 - Planning',
         'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
         'Natural Language :: English',
         'Topic :: Software Development',
@@ -41,10 +40,6 @@ setuptools.setup(
     install_requires=[
         'requests==2.22.0',
         'singer-python==5.7.0'
-    ],
-    tests_require=[
-        'flake8',
-        'pytest'
     ],
     python_requires='>=3.6',
     entry_points={

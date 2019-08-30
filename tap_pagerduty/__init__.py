@@ -2,7 +2,6 @@ import singer
 
 from .streams import AVAILABLE_STREAMS
 
-
 LOGGER = singer.get_logger()
 
 
@@ -19,19 +18,19 @@ def discover(config, state={}):
 
 def sync(config, catalog, state={}):
     LOGGER.info('Starting sync..')
-    selected_streams = [catalog_entry.stream for catalog_entry in catalog.get_selected_streams(state)]
+    selected_streams = {catalog_entry.stream for catalog_entry in catalog.get_selected_streams(state)}
 
-    streams_to_sync = []
-    for selected_stream in selected_streams:
-        for available_stream in AVAILABLE_STREAMS:
-            if selected_stream == available_stream.stream:
-                streams_to_sync.append(available_stream(config=config, state=state))
+    streams_to_sync = set()
+    for available_stream in AVAILABLE_STREAMS:
+        if available_stream.stream in selected_streams:
+            streams_to_sync.add(available_stream(config=config, state=state))
 
     for stream in streams_to_sync:
         singer.bookmarks.set_currently_syncing(state=stream.state, tap_stream_id=stream.tap_stream_id)
         stream.write_state()
         stream.write_schema()
         stream.sync()
+        singer.bookmarks.set_currently_syncing(state=stream.state, tap_stream_id=None)
         stream.write_state()
 
 

@@ -4,12 +4,13 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-requests = "==2.22.0"
-singer-python = "==5.7.0"
 
 [dev-packages]
+tap-pagerduty = {path = ".", editable = true}
+isort = "*"
 flake8 = "*"
 pytest = "*"
+tox = "*"
 
 [requires]
 

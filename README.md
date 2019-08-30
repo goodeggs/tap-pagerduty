@@ -1,6 +1,8 @@
 # tap-pagerduty
+[![PyPI version](https://badge.fury.io/py/tap-pagerduty.svg)](https://badge.fury.io/py/tap-pagerduty)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Python Versions](https://img.shields.io/badge/python-3.6%20%7C%203.7-blue.svg)](https://pypi.python.org/pypi/ansicolortags/)
+[![Build Status](https://travis-ci.com/goodeggs/tap-pagerduty.svg?branch=master)](https://travis-ci.com/goodeggs/tap-pagerduty)
 
 A [Singer](https://www.singer.io/) tap for extracting data from the [Pagerduty REST API v2](https://v2.developer.pagerduty.com/docs/rest-api).
 
@@ -128,3 +130,50 @@ $ ~/.venvs/tap-pagerduty/bin/tap-pagerduty --config=config/pagerduty.config.json
 $ tail -1 state.json > state.json.tmp
 $ mv state.json.tmp state.json
 ```
+
+## Contributing
+
+The first step to contributing is getting a copy of the source code. First, [fork `tap-pagerduty` on GitHub](https://github.com/goodeggs/tap-pagerduty/fork). Then, `cd` into the directory where you want your copy of the source code to live and clone the source code:
+
+```bash
+$ git clone git@github.com:YourGitHubName/tap-pagerduty.git
+```
+
+Now that you have a copy of the source code on your local machine, you can leverage [Pipenv](https://docs.pipenv.org/en/latest/) and the corresponding `Pipfile` to install of the development dependencies within a virtual environment:
+
+```bash
+$ pipenv install --three --dev
+```
+
+This command will create an isolated virtual environment for your `tap-pagerduty` project and install all the development dependencies defined within the `Pipfile` inside of the environment. You can then enter a shell within the environment:
+
+```bash
+$ pipenv shell
+```
+
+Alternatively, you can run individual commands within the environment without entering the shell:
+
+```bash
+$ pipenv run <command>
+```
+
+For example, to format your code using [isort](https://github.com/timothycrosley/isort) and [flake8](http://flake8.pycqa.org/en/latest/index.html) before commiting changes, run the following commands:
+
+```bash
+$ pipenv run make isort
+$ pipenv run make flake8
+```
+
+You can also run the entire testing suite before committing using [tox](https://tox.readthedocs.io/en/latest/):
+
+```bash
+$ pipenv run tox
+```
+
+Finally, you can run your local version of the tap within the virtual environment using a command like the following:
+
+```bash
+$ pipenv run tap-pagerduty --config=config/pagerduty.config.json --catalog=catalog.json
+```
+
+Once you've confirmed that your changes work and the testing suite passes, feel free to put out a PR!
