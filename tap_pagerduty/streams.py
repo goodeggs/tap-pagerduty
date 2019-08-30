@@ -290,8 +290,8 @@ class NotificationsStream(PagerdutyStream):
                                         val=running_bookmark_str)
 
 
-AVAILABLE_STREAMS = [
+AVAILABLE_STREAMS = {
     IncidentsStream,
     ServicesStream,
     NotificationsStream
-]
+}
