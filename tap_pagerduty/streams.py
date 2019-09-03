@@ -135,11 +135,11 @@ class PagerdutyResponse:
 
 class IncidentsStream(PagerdutyStream):
     tap_stream_id = 'incidents'
-    stream = 'IncidentsStream'
+    stream = 'incidents'
     key_properties = 'id'
     replication_key = 'last_status_change_at'
     valid_replication_keys = ['last_status_change_at']
-    replication_method = 'INCREMENTAL'
+    replication_method = 'FULL_TABLE'
     valid_params = [
         'since',
         'until',
@@ -187,25 +187,46 @@ class IncidentsStream(PagerdutyStream):
                     for page in self._list_resource(url_suffix=f"/{self.tap_stream_id}", params=self.params):
                         for record in page.get(self.tap_stream_id):
                             record_replication_key_dtime = datetime.strptime(record.get(self.replication_key), '%Y-%m-%dT%H:%M:%SZ')
-                            if (current_bookmark_dtime is None) or (record_replication_key_dtime >= current_bookmark_dtime):
+
+                            substream_params = {
+                                "limit": 100,
+                                "offset": 0,
+                                "time_zone": "UTC"
+                            }
+                            record['log_entries'] = []
+                            for page in self._list_resource(url_suffix=f"/{self.tap_stream_id}/{record.get('id')}/log_entries", params=substream_params):
+                                record['log_entries'].extend(page.get('log_entries'))
+
+                            record['alerts'] = []
+                            for page in self._list_resource(url_suffix=f"/{self.tap_stream_id}/{record.get('id')}/alerts", params=substream_params):
+                                record['alerts'].extend(page.get('alerts'))
+
+                            if self.replication_method == 'INCREMENTAL':
+                                if (current_bookmark_dtime is None) or (record_replication_key_dtime >= current_bookmark_dtime):
+                                    with singer.Transformer() as transformer:
+                                        transformed_record = transformer.transform(data=record, schema=self.schema)
+                                        singer.write_record(stream_name=self.stream, time_extracted=singer.utils.now(), record=transformed_record)
+                                        counter.increment()
+                                        running_bookmark_dtime = self.update_bookmark(running_bookmark_dtime, record_replication_key_dtime)
+                            else:
                                 with singer.Transformer() as transformer:
                                     transformed_record = transformer.transform(data=record, schema=self.schema)
                                     singer.write_record(stream_name=self.stream, time_extracted=singer.utils.now(), record=transformed_record)
                                     counter.increment()
-                                    running_bookmark_dtime = self.update_bookmark(running_bookmark_dtime, record_replication_key_dtime)
 
                     since_dtime += request_range_limit
 
-        running_bookmark_str = datetime.strftime(running_bookmark_dtime, '%Y-%m-%dT%H:%M:%SZ')
-        singer.bookmarks.write_bookmark(state=self.state,
-                                        tap_stream_id=self.tap_stream_id,
-                                        key=self.replication_key,
-                                        val=running_bookmark_str)
+        if self.replication_method == 'INCREMENTAL':
+            running_bookmark_str = datetime.strftime(running_bookmark_dtime, '%Y-%m-%dT%H:%M:%SZ')
+            singer.bookmarks.write_bookmark(state=self.state,
+                                            tap_stream_id=self.tap_stream_id,
+                                            key=self.replication_key,
+                                            val=running_bookmark_str)
 
 
 class ServicesStream(PagerdutyStream):
     tap_stream_id = 'services'
-    stream = 'ServicesStream'
+    stream = 'services'
     key_properties = 'id'
     valid_replication_keys = []
     replication_method = 'FULL_TABLE'
@@ -235,7 +256,7 @@ class ServicesStream(PagerdutyStream):
 
 class NotificationsStream(PagerdutyStream):
     tap_stream_id = 'notifications'
-    stream = 'NotificationsStream'
+    stream = 'notifications'
     key_properties = 'id'
     replication_key = 'started_at'
     valid_replication_keys = ['started_at']
