@@ -76,13 +76,65 @@
     "assignments": {
       "type": ["null", "array"],
       "items": {
-        "type": ["null", "string"]
+        "type": ["null", "object"],
+        "properties": {
+          "at": {
+            "type": ["null", "string"],
+            "format": "date-time"
+          },
+          "assignee": {
+            "type": ["null", "object"],
+            "properties": {
+              "id": {
+                "type": ["null", "string"]
+              },
+              "summary": {
+                "type": ["null", "string"]
+              },
+              "type": {
+                "type": ["null", "string"]
+              },
+              "self": {
+                "type": ["null", "string"]
+              },
+              "html_url": {
+                "type": ["null", "string"]
+              }
+            }
+          }
+        }
       }
     },
     "acknowledgements": {
       "type": ["null", "array"],
       "items": {
-        "type": ["null", "string"]
+        "type": ["null", "object"],
+        "properties": {
+          "at": {
+            "type": ["null", "string"],
+            "format": "date-time"
+          },
+          "acknowledger": {
+            "type": ["null", "object"],
+            "properties": {
+              "id": {
+                "type": ["null", "string"]
+              },
+              "summary": {
+                "type": ["null", "string"]
+              },
+              "type": {
+                "type": ["null", "string"]
+              },
+              "self": {
+                "type": ["null", "string"]
+              },
+              "html_url": {
+                "type": ["null", "string"]
+              }
+            }
+          }
+        }
       }
     },
     "last_status_change_at": {
@@ -183,6 +235,262 @@
         },
         "conference_url": {
           "type": ["null", "string"]
+        }
+      }
+    },
+    "log_entries": {
+      "type": ["null", "array"],
+      "items": {
+        "type": ["null", "object"],
+        "properties": {
+          "id": {
+            "type": ["null", "string"]
+          },
+          "type": {
+            "type": ["null", "string"]
+          },
+          "summary": {
+            "type": ["null", "string"]
+          },
+          "self": {
+            "type": ["null", "string"]
+          },
+          "html_url": {
+            "type": ["null", "string"]
+          },
+          "created_at": {
+            "type": ["null", "string"],
+            "format": "date-time"
+          },
+          "agent": {
+            "type": ["null", "object"],
+            "properties": {
+              "id": {
+                "type": ["null", "string"]
+              },
+              "type": {
+                "type": ["null", "string"]
+              },
+              "summary": {
+                "type": ["null", "string"]
+              },
+              "self": {
+                "type": ["null", "string"]
+              },
+              "html_url": {
+                "type": ["null", "string"]
+              }
+            }
+          },
+          "channel": {
+            "type": ["null", "object"],
+            "properties": {
+              "type": {
+                "type": ["null", "string"]
+              }
+            }
+          },
+          "incident": {
+            "type": ["null", "object"],
+            "properties": {
+              "id": {
+                "type": ["null", "string"]
+              },
+              "type": {
+                "type": ["null", "string"]
+              },
+              "summary": {
+                "type": ["null", "string"]
+              },
+              "self": {
+                "type": ["null", "string"]
+              },
+              "html_url": {
+                "type": ["null", "string"]
+              }
+            }
+          },
+          "teams": {
+            "type": ["null", "array"],
+            "items": {
+              "type": ["null", "object"],
+              "properties": {
+                "id": {
+                  "type": ["null", "string"]
+                },
+                "type": {
+                  "type": ["null", "string"]
+                },
+                "summary": {
+                  "type": ["null", "string"]
+                },
+                "self": {
+                  "type": ["null", "string"]
+                },
+                "html_url": {
+                  "type": ["null", "string"]
+                }
+              }
+            }
+          },
+          "event_details": {
+            "type": ["null", "object"],
+            "properties": {
+              "description": {
+                "type": ["null", "string"]
+              }
+            }
+          }
+        }
+      }
+    },
+    "alerts": {
+      "type": ["null", "array"],
+      "items": {
+        "type": ["null", "object"],
+        "properties": {
+          "id": {
+            "type": ["null", "string"]
+          },
+          "type": {
+            "type": ["null", "string"]
+          },
+          "summary": {
+            "type": ["null", "string"]
+          },
+          "self": {
+            "type": ["null", "string"]
+          },
+          "html_url": {
+            "type": ["null", "string"]
+          },
+          "created_at": {
+            "type": ["null", "string"],
+            "format": "date-time"
+          },
+          "status": {
+            "type": ["null", "string"]
+          },
+          "alert_key": {
+            "type": ["null", "string"]
+          },
+          "service": {
+            "type": ["null", "object"],
+            "properties": {
+              "id": {
+                "type": ["null", "string"]
+              },
+              "type": {
+                "type": ["null", "string"]
+              },
+              "summary": {
+                "type": ["null", "string"]
+              },
+              "self": {
+                "type": ["null", "string"]
+              },
+              "html_url": {
+                "type": ["null", "string"]
+              }
+            }
+          },
+          "body": {
+            "type": ["null", "object"],
+            "properties": {
+              "type": {
+                "type": ["null", "string"]
+              },
+              "contexts": {
+                "type": ["null", "array"],
+                "items": {
+                  "type": ["null", "object"],
+                  "properties": {
+                    "type": {
+                      "type": ["null", "string"]
+                    },
+                    "href": {
+                      "type": ["null", "string"]
+                    },
+                    "src": {
+                      "type": ["null", "string"]
+                    },
+                    "text": {
+                      "type": ["null", "string"]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "incident": {
+            "type": ["null", "object"],
+            "properties": {
+              "id": {
+                "type": ["null", "string"]
+              },
+              "summary": {
+                "type": ["null", "string"]
+              },
+              "type": {
+                "type": ["null", "string"]
+              },
+              "self": {
+                "type": ["null", "string"]
+              },
+              "html_url": {
+                "type": ["null", "string"]
+              }
+            }
+          },
+          "suppressed": {
+            "type": ["null", "boolean"]
+          },
+          "severity": {
+            "type": ["null", "string"]
+          },
+          "integration": {
+            "type": ["null", "object"],
+            "properties": {
+              "id": {
+                "type": ["null", "string"]
+              },
+              "summary": {
+                "type": ["null", "string"]
+              },
+              "type": {
+                "type": ["null", "string"]
+              },
+              "self": {
+                "type": ["null", "string"]
+              },
+              "html_url": {
+                "type": ["null", "string"]
+              },
+              "name": {
+                "type": ["null", "string"]
+              },
+              "service": {
+                "type": ["null", "object"],
+                "properties": {
+                  "id": {
+                    "type": ["null", "string"]
+                  },
+                  "summary": {
+                    "type": ["null", "string"]
+                  },
+                  "type": {
+                    "type": ["null", "string"]
+                  },
+                  "self": {
+                    "type": ["null", "string"]
+                  },
+                  "html_url": {
+                    "type": ["null", "string"]
+                  }
+                }
+              }
+            }
+          }
         }
       }
     }
