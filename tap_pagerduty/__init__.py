@@ -21,7 +21,6 @@ LOGGER.addHandler(rollbar_handler)
 
 def discover(config, state={}):
     LOGGER.info('Starting discovery..')
-    rollbar.report_message('Starting discovery..', 'info')
     data = {}
     data['streams'] = []
     for available_stream in AVAILABLE_STREAMS:
