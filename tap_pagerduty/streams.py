@@ -224,6 +224,35 @@ class IncidentsStream(PagerdutyStream):
                                             val=running_bookmark_str)
 
 
+class EscalationPoliciesStream(PagerdutyStream):
+    tap_stream_id = 'escalation_policies'
+    stream = 'escalation_policies'
+    key_properties = 'id'
+    valid_replication_keys = []
+    replication_method = 'FULL_TABLE'
+    valid_params = [
+        'user_ids[]',
+        'team_ids[]',
+        'sort_by',
+        'query',
+        'include[]',
+    ]
+    required_params = []
+
+    def __init__(self, config, state, **kwargs):
+        super().__init__(config, state)
+
+    def sync(self):
+        with singer.metrics.job_timer(job_type=f"list_{self.tap_stream_id}"):
+            with singer.metrics.record_counter(endpoint=self.tap_stream_id) as counter:
+                for page in self._list_resource(url_suffix=f"/{self.tap_stream_id}", params=self.params):
+                    for record in page.get(self.tap_stream_id):
+                        with singer.Transformer() as transformer:
+                            transformed_record = transformer.transform(data=record, schema=self.schema)
+                            singer.write_record(stream_name=self.stream, time_extracted=singer.utils.now(), record=transformed_record)
+                            counter.increment()
+
+
 class ServicesStream(PagerdutyStream):
     tap_stream_id = 'services'
     stream = 'services'
@@ -314,5 +343,6 @@ class NotificationsStream(PagerdutyStream):
 AVAILABLE_STREAMS = {
     IncidentsStream,
     ServicesStream,
-    NotificationsStream
+    NotificationsStream,
+    EscalationPoliciesStream
 }

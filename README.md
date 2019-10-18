@@ -10,23 +10,11 @@ A [Singer](https://www.singer.io/) tap for extracting data from the [Pagerduty R
 
 Since package dependencies tend to conflict between various taps and targets, Singer [recommends](https://github.com/singer-io/getting-started/blob/master/docs/RUNNING_AND_DEVELOPING.md#running-singer-with-python) installing taps and targets into their own isolated virtual environments:
 
-### Install Pagerduty Tap
+### Install Pagerduty Tap and Singer Target setup with direnv (Recommended)
 
 ```bash
 $ cd tap-pagerduty
-$ python3 -m venv ~/.venvs/tap-pagerduty
-$ source ~/.venvs/tap-pagerduty/bin/activate
-$ pip3 install tap-pagerduty
-$ deactivate
-```
-
-### Install Singer Target
-
-```bash
-$ python3 -m venv ~/.venvs/target-stitch
-$ source ~/.venvs/target-stitch/bin/activate
-$ pip3 install target-stitch
-$ deactivate
+$ direnv allow
 ```
 
 ## Configuration
@@ -69,19 +57,14 @@ The current version of the tap syncs three distinct [Streams](https://github.com
 1. `Incidents`: ([Endpoint](https://api-reference.pagerduty.com/#!/Incidents/get_incidents), [Schema](https://github.com/goodeggs/tap-pagerduty/blob/master/tap_pagerduty/schemas/incidents.json))
 2. `Notifications`: ([Endpoint](https://api-reference.pagerduty.com/#!/Notifications/get_notifications), [Schema](https://github.com/goodeggs/tap-pagerduty/blob/master/tap_pagerduty/schemas/notifications.json))
 3. `Services`: ([Endpoint](https://api-reference.pagerduty.com/#!/Services/get_services), [Schema](https://github.com/goodeggs/tap-pagerduty/blob/master/tap_pagerduty/schemas/services.json))
+3. `Escalation Policies`: ([Endpoint](https://api-reference.pagerduty.com/#!/Escalation_Policies/get_escalation_policies), [Schema](https://github.com/goodeggs/tap-pagerduty/blob/master/tap_pagerduty/schemas/escalation_policies.json))
 
 ## Discovery
 
-Singer taps describe the data that a stream supports via a [Discovery](https://github.com/singer-io/getting-started/blob/master/docs/DISCOVERY_MODE.md#discovery-mode) process. You can run the Pagerduty tap in Discovery mode by passing the `--discover` flag at runtime:
+Singer taps describe the data that a stream supports via a [Discovery](https://github.com/singer-io/getting-started/blob/master/docs/DISCOVERY_MODE.md#discovery-mode) process. You can run the Pagerduty tap in Discovery mode by passing the `--discover` flag at runtime, we've wrapped it to populate the catalog.json
 
 ```bash
-$ ~/.venvs/tap-pagerduty/bin/tap-pagerduty --config=config/pagerduty.config.json --discover
-```
-
-The tap will generate a [Catalog](https://github.com/singer-io/getting-started/blob/master/docs/DISCOVERY_MODE.md#the-catalog) to stdout. To pass the Catalog to a file instead, simply redirect it to a file:
-
-```bash
-$ ~/.venvs/tap-pagerduty/bin/tap-pagerduty --config=config/pagerduty.config.json --discover > catalog.json
+$ make discover
 ```
 
 ## Sync Locally
@@ -89,23 +72,13 @@ $ ~/.venvs/tap-pagerduty/bin/tap-pagerduty --config=config/pagerduty.config.json
 Running a tap in [Sync mode](https://github.com/singer-io/getting-started/blob/master/docs/SYNC_MODE.md#sync-mode) will extract data from the various Streams. In order to run a tap in Sync mode, pass a configuration file and catalog file:
 
 ```bash
-$ ~/.venvs/tap-pagerduty/bin/tap-pagerduty --config=config/pagerduty.config.json --catalog=catalog.json
+$ make basic-sync
 ```
 
-The tap will emit occasional [State messages](https://github.com/singer-io/getting-started/blob/master/docs/SPEC.md#state-message). You can persist State between runs by redirecting State to a file:
+The tap will emit occasional [State messages](https://github.com/singer-io/getting-started/blob/master/docs/SPEC.md#state-message).  These messages are captured in a statefile, this target uses state if it exists.
 
 ```bash
-$ ~/.venvs/tap-pagerduty/bin/tap-pagerduty --config=config/pagerduty.config.json --catalog=catalog.json >> state.json
-$ tail -1 state.json > state.json.tmp
-$ mv state.json.tmp state.json
-```
-
-To pick up from where the tap left off on subsequent runs, simply supply the [State file](https://github.com/singer-io/getting-started/blob/master/docs/CONFIG_AND_STATE.md#state-file) at runtime:
-
-```bash
-$ ~/.venvs/tap-pagerduty/bin/tap-pagerduty --config=config/pagerduty.config.json --catalog=catalog.json --state=state.json >> state.json
-$ tail -1 state.json > state.json.tmp
-$ mv state.json.tmp state.json
+$ make sync
 ```
 
 ## Sync to Stitch
@@ -160,8 +133,7 @@ $ pipenv run <command>
 For example, to format your code using [isort](https://github.com/timothycrosley/isort) and [flake8](http://flake8.pycqa.org/en/latest/index.html) before commiting changes, run the following commands:
 
 ```bash
-$ pipenv run make isort
-$ pipenv run make flake8
+$ pipenv run make lint
 ```
 
 You can also run the entire testing suite before committing using [tox](https://tox.readthedocs.io/en/latest/):
