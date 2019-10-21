@@ -10,11 +10,10 @@ A [Singer](https://www.singer.io/) tap for extracting data from the [Pagerduty R
 
 Since package dependencies tend to conflict between various taps and targets, Singer [recommends](https://github.com/singer-io/getting-started/blob/master/docs/RUNNING_AND_DEVELOPING.md#running-singer-with-python) installing taps and targets into their own isolated virtual environments:
 
-### Install Pagerduty Tap and Singer Target setup with direnv (Recommended)
+### Install Pagerduty Tap
 
 ```bash
-$ cd tap-pagerduty
-$ direnv allow
+$ make prod-env
 ```
 
 ## Configuration
@@ -57,14 +56,19 @@ The current version of the tap syncs three distinct [Streams](https://github.com
 1. `Incidents`: ([Endpoint](https://api-reference.pagerduty.com/#!/Incidents/get_incidents), [Schema](https://github.com/goodeggs/tap-pagerduty/blob/master/tap_pagerduty/schemas/incidents.json))
 2. `Notifications`: ([Endpoint](https://api-reference.pagerduty.com/#!/Notifications/get_notifications), [Schema](https://github.com/goodeggs/tap-pagerduty/blob/master/tap_pagerduty/schemas/notifications.json))
 3. `Services`: ([Endpoint](https://api-reference.pagerduty.com/#!/Services/get_services), [Schema](https://github.com/goodeggs/tap-pagerduty/blob/master/tap_pagerduty/schemas/services.json))
-3. `Escalation Policies`: ([Endpoint](https://api-reference.pagerduty.com/#!/Escalation_Policies/get_escalation_policies), [Schema](https://github.com/goodeggs/tap-pagerduty/blob/master/tap_pagerduty/schemas/escalation_policies.json))
 
 ## Discovery
 
-Singer taps describe the data that a stream supports via a [Discovery](https://github.com/singer-io/getting-started/blob/master/docs/DISCOVERY_MODE.md#discovery-mode) process. You can run the Pagerduty tap in Discovery mode by passing the `--discover` flag at runtime, we've wrapped it to populate the catalog.json
+Singer taps describe the data that a stream supports via a [Discovery](https://github.com/singer-io/getting-started/blob/master/docs/DISCOVERY_MODE.md#discovery-mode) process. You can run the Pagerduty tap in Discovery mode by passing the `--discover` flag at runtime:
 
 ```bash
-$ make discover
+$ ./.venvs/tap-pagerduty/bin/tap-pagerduty --config=config/pagerduty.config.json --discover
+```
+
+The tap will generate a [Catalog](https://github.com/singer-io/getting-started/blob/master/docs/DISCOVERY_MODE.md#the-catalog) to stdout. To pass the Catalog to a file instead, simply redirect it to a file:
+
+```bash
+$ ./.venvs/tap-pagerduty/bin/tap-pagerduty --config=config/pagerduty.config.json --discover > catalog.json
 ```
 
 ## Sync Locally
@@ -72,13 +76,23 @@ $ make discover
 Running a tap in [Sync mode](https://github.com/singer-io/getting-started/blob/master/docs/SYNC_MODE.md#sync-mode) will extract data from the various Streams. In order to run a tap in Sync mode, pass a configuration file and catalog file:
 
 ```bash
-$ make basic-sync
+$ ./.venvs/tap-pagerduty/bin/tap-pagerduty --config=config/pagerduty.config.json --catalog=catalog.json
 ```
 
-The tap will emit occasional [State messages](https://github.com/singer-io/getting-started/blob/master/docs/SPEC.md#state-message).  These messages are captured in a statefile, this target uses state if it exists.
+The tap will emit occasional [State messages](https://github.com/singer-io/getting-started/blob/master/docs/SPEC.md#state-message). You can persist State between runs by redirecting State to a file:
 
 ```bash
-$ make sync
+$ ./.venvs/tap-pagerduty/bin/tap-pagerduty --config=config/pagerduty.config.json --catalog=catalog.json >> state.json
+$ tail -1 state.json > state.json.tmp
+$ mv state.json.tmp state.json
+```
+
+To pick up from where the tap left off on subsequent runs, simply supply the [State file](https://github.com/singer-io/getting-started/blob/master/docs/CONFIG_AND_STATE.md#state-file) at runtime:
+
+```bash
+$ ./.venvs/tap-pagerduty/bin/tap-pagerduty --config=config/pagerduty.config.json --catalog=catalog.json --state=state.json >> state.json
+$ tail -1 state.json > state.json.tmp
+$ mv state.json.tmp state.json
 ```
 
 ## Sync to Stitch
@@ -99,53 +113,41 @@ An example configuration file will look as follows:
 Once the configuration file is created, simply pipe the output of the tap to the Stitch Data target and supply the target with the newly created configuration file:
 
 ```bash
-$ ~/.venvs/tap-pagerduty/bin/tap-pagerduty --config=config/pagerduty.config.json --catalog=catalog.json --state=state.json | ~/.venvs/target-stitch/bin/target-stitch --config=config/stitch.config.json >> state.json
+$ ./.venvs/tap-pagerduty/bin/tap-pagerduty --config=config/pagerduty.config.json --catalog=catalog.json --state=state.json | ./.venvs/target-stitch/bin/target-stitch --config=config/stitch.config.json >> state.json
 $ tail -1 state.json > state.json.tmp
 $ mv state.json.tmp state.json
 ```
 
 ## Contributing
 
-The first step to contributing is getting a copy of the source code. First, [fork `tap-pagerduty` on GitHub](https://github.com/goodeggs/tap-pagerduty/fork). Then, `cd` into the directory where you want your copy of the source code to live and clone the source code:
+### Required Tools [Pipenv] (https://docs.pipenv.org/en/latest/) and [Direnv](https://direnv.net/)
+
+The first step to contributing is getting a copy of the source code, and setting up your environment. First, [fork `tap-pagerduty` on GitHub](https://github.com/goodeggs/tap-pagerduty/fork). Then, `cd` into the directory where you want your copy of the source code to live and clone the source code enabling direnv:
 
 ```bash
 $ git clone git@github.com:YourGitHubName/tap-pagerduty.git
-```
-
-Now that you have a copy of the source code on your local machine, you can leverage [Pipenv](https://docs.pipenv.org/en/latest/) and the corresponding `Pipfile` to install of the development dependencies within a virtual environment:
-
-```bash
-$ pipenv install --three --dev
-```
-
-This command will create an isolated virtual environment for your `tap-pagerduty` project and install all the development dependencies defined within the `Pipfile` inside of the environment. You can then enter a shell within the environment:
-
-```bash
-$ pipenv shell
-```
-
-Alternatively, you can run individual commands within the environment without entering the shell:
-
-```bash
-$ pipenv run <command>
+$ direnv allow
 ```
 
 For example, to format your code using [isort](https://github.com/timothycrosley/isort) and [flake8](http://flake8.pycqa.org/en/latest/index.html) before commiting changes, run the following commands:
 
 ```bash
-$ pipenv run make lint
+$ make isort
+$ make flake8
 ```
 
 You can also run the entire testing suite before committing using [tox](https://tox.readthedocs.io/en/latest/):
 
 ```bash
-$ pipenv run tox
+$ make lint
 ```
 
 Finally, you can run your local version of the tap within the virtual environment using a command like the following:
 
 ```bash
-$ pipenv run tap-pagerduty --config=config/pagerduty.config.json --catalog=catalog.json
+$ tap-pagerduty --config=config/pagerduty.config.json --catalog=catalog.json
 ```
+
+There's also a few useful shortcuts avainable in the `Makefile` take a look!
 
 Once you've confirmed that your changes work and the testing suite passes, feel free to put out a PR!
