@@ -578,6 +578,475 @@
       ]
     },
     {
+      "tap_stream_id": "notifications",
+      "replication_key": "started_at",
+      "replication_method": "INCREMENTAL",
+      "key_properties": "id",
+      "schema": {
+        "properties": {
+          "id": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "type": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "started_at": {
+            "format": "date-time",
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "address": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "user": {
+            "properties": {
+              "id": {
+                "type": [
+                  "null",
+                  "string"
+                ]
+              },
+              "type": {
+                "type": [
+                  "null",
+                  "string"
+                ]
+              },
+              "summary": {
+                "type": [
+                  "null",
+                  "string"
+                ]
+              },
+              "self": {
+                "type": [
+                  "null",
+                  "string"
+                ]
+              },
+              "html_url": {
+                "type": [
+                  "null",
+                  "string"
+                ]
+              }
+            },
+            "type": [
+              "null",
+              "object"
+            ]
+          }
+        },
+        "type": [
+          "null",
+          "object"
+        ],
+        "additionalProperties": false
+      },
+      "stream": "notifications",
+      "metadata": [
+        {
+          "breadcrumb": [],
+          "metadata": {
+            "table-key-properties": "id",
+            "selected": true,
+            "forced-replication-method": "INCREMENTAL",
+            "valid-replication-keys": [
+              "started_at"
+            ],
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "id"
+          ],
+          "metadata": {
+            "inclusion": "automatic"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "type"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "started_at"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "address"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "user"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        }
+      ]
+    },
+    {
+      "tap_stream_id": "escalation_policies",
+      "replication_method": "FULL_TABLE",
+      "key_properties": "id",
+      "schema": {
+        "properties": {
+          "id": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "type": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "summary": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "self": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "html_url": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "name": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "description": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "num_loops": {
+            "type": [
+              "null",
+              "integer"
+            ]
+          },
+          "escalation_rules": {
+            "items": {
+              "properties": {
+                "id": {
+                  "type": [
+                    "null",
+                    "string"
+                  ]
+                },
+                "escalation_delay_in_minutes": {
+                  "type": [
+                    "null",
+                    "integer"
+                  ]
+                },
+                "targets": {
+                  "items": {
+                    "properties": {
+                      "id": {
+                        "type": [
+                          "null",
+                          "string"
+                        ]
+                      },
+                      "summary": {
+                        "type": [
+                          "null",
+                          "string"
+                        ]
+                      },
+                      "type": {
+                        "type": [
+                          "null",
+                          "string"
+                        ]
+                      },
+                      "self": {
+                        "type": [
+                          "null",
+                          "string"
+                        ]
+                      },
+                      "html_url": {
+                        "type": [
+                          "null",
+                          "string"
+                        ]
+                      }
+                    },
+                    "type": [
+                      "null",
+                      "object"
+                    ]
+                  },
+                  "type": [
+                    "null",
+                    "array"
+                  ]
+                }
+              },
+              "type": [
+                "null",
+                "object"
+              ]
+            },
+            "type": [
+              "null",
+              "array"
+            ]
+          },
+          "services": {
+            "items": {
+              "properties": {
+                "id": {
+                  "type": [
+                    "null",
+                    "string"
+                  ]
+                },
+                "type": {
+                  "type": [
+                    "null",
+                    "string"
+                  ]
+                },
+                "summary": {
+                  "type": [
+                    "null",
+                    "string"
+                  ]
+                },
+                "self": {
+                  "type": [
+                    "null",
+                    "string"
+                  ]
+                },
+                "html_url": {
+                  "type": [
+                    "null",
+                    "string"
+                  ]
+                }
+              },
+              "type": [
+                "null",
+                "object"
+              ]
+            },
+            "type": [
+              "null",
+              "array"
+            ]
+          },
+          "teams": {
+            "items": {
+              "properties": {
+                "id": {
+                  "type": [
+                    "null",
+                    "string"
+                  ]
+                },
+                "type": {
+                  "type": [
+                    "null",
+                    "string"
+                  ]
+                },
+                "summary": {
+                  "type": [
+                    "null",
+                    "string"
+                  ]
+                },
+                "self": {
+                  "type": [
+                    "null",
+                    "string"
+                  ]
+                },
+                "html_url": {
+                  "type": [
+                    "null",
+                    "string"
+                  ]
+                }
+              },
+              "type": [
+                "null",
+                "object"
+              ]
+            },
+            "type": [
+              "null",
+              "array"
+            ]
+          }
+        },
+        "type": [
+          "null",
+          "object"
+        ],
+        "additionalProperties": false
+      },
+      "stream": "escalation_policies",
+      "metadata": [
+        {
+          "breadcrumb": [],
+          "metadata": {
+            "table-key-properties": "id",
+            "selected": true,
+            "forced-replication-method": "FULL_TABLE",
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "id"
+          ],
+          "metadata": {
+            "inclusion": "automatic"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "type"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "summary"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "self"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "html_url"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "name"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "description"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "num_loops"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "escalation_rules"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "services"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "teams"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        }
+      ]
+    },
+    {
       "tap_stream_id": "incidents",
       "replication_key": "last_status_change_at",
       "replication_method": "FULL_TABLE",
@@ -1737,144 +2206,6 @@
           "breadcrumb": [
             "properties",
             "alerts"
-          ],
-          "metadata": {
-            "inclusion": "available"
-          }
-        }
-      ]
-    },
-    {
-      "tap_stream_id": "notifications",
-      "replication_key": "started_at",
-      "replication_method": "INCREMENTAL",
-      "key_properties": "id",
-      "schema": {
-        "properties": {
-          "id": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "type": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "started_at": {
-            "format": "date-time",
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "address": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "user": {
-            "properties": {
-              "id": {
-                "type": [
-                  "null",
-                  "string"
-                ]
-              },
-              "type": {
-                "type": [
-                  "null",
-                  "string"
-                ]
-              },
-              "summary": {
-                "type": [
-                  "null",
-                  "string"
-                ]
-              },
-              "self": {
-                "type": [
-                  "null",
-                  "string"
-                ]
-              },
-              "html_url": {
-                "type": [
-                  "null",
-                  "string"
-                ]
-              }
-            },
-            "type": [
-              "null",
-              "object"
-            ]
-          }
-        },
-        "type": [
-          "null",
-          "object"
-        ],
-        "additionalProperties": false
-      },
-      "stream": "notifications",
-      "metadata": [
-        {
-          "breadcrumb": [],
-          "metadata": {
-            "table-key-properties": "id",
-            "selected": true,
-            "forced-replication-method": "INCREMENTAL",
-            "valid-replication-keys": [
-              "started_at"
-            ],
-            "inclusion": "available"
-          }
-        },
-        {
-          "breadcrumb": [
-            "properties",
-            "id"
-          ],
-          "metadata": {
-            "inclusion": "automatic"
-          }
-        },
-        {
-          "breadcrumb": [
-            "properties",
-            "type"
-          ],
-          "metadata": {
-            "inclusion": "available"
-          }
-        },
-        {
-          "breadcrumb": [
-            "properties",
-            "started_at"
-          ],
-          "metadata": {
-            "inclusion": "available"
-          }
-        },
-        {
-          "breadcrumb": [
-            "properties",
-            "address"
-          ],
-          "metadata": {
-            "inclusion": "available"
-          }
-        },
-        {
-          "breadcrumb": [
-            "properties",
-            "user"
           ],
           "metadata": {
             "inclusion": "available"

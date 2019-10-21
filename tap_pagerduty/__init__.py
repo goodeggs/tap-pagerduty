@@ -7,16 +7,17 @@ from rollbar.logger import RollbarHandler
 
 from .streams import AVAILABLE_STREAMS
 
-ROLLBAR_ACCESS_TOKEN = os.environ["ROLLBAR_ACCESS_TOKEN"]
-ROLLBAR_ENVIRONMENT = os.environ["ROLLBAR_ENVIRONMENT"]
-
 LOGGER = singer.get_logger()
 
-rollbar.init(ROLLBAR_ACCESS_TOKEN, ROLLBAR_ENVIRONMENT)
-rollbar_handler = RollbarHandler()
-# Only send level WARNING and above to Rollbar.
-rollbar_handler.setLevel(logging.WARNING)
-LOGGER.addHandler(rollbar_handler)
+
+if "ROLLBAR_ACCESS_TOKEN" in os.environ:
+    ROLLBAR_ACCESS_TOKEN = os.environ["ROLLBAR_ACCESS_TOKEN"]
+    ROLLBAR_ENVIRONMENT = os.environ["ROLLBAR_ENVIRONMENT"]
+    rollbar.init(ROLLBAR_ACCESS_TOKEN, ROLLBAR_ENVIRONMENT)
+    rollbar_handler = RollbarHandler()
+    # Only send level WARNING and above to Rollbar.
+    rollbar_handler.setLevel(logging.WARNING)
+    LOGGER.addHandler(rollbar_handler)
 
 
 def discover(config, state={}):

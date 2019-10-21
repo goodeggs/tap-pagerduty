@@ -1,0 +1,111 @@
+{
+  "type": ["null", "object"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": ["null", "string"]
+    },
+    "type": {
+      "type": ["null", "string"]
+    },
+    "summary": {
+      "type": ["null", "string"]
+    },
+    "self": {
+      "type": ["null", "string"]
+    },
+    "html_url": {
+      "type": ["null", "string"]
+    },
+    "name": {
+      "type": ["null", "string"]
+    },
+    "description": {
+      "type": ["null", "string"]
+    },
+    "num_loops": {
+      "type": ["null", "integer"]
+    },
+    "escalation_rules": {
+      "type": ["null", "array"],
+      "items": {
+        "type": ["null","object"],
+        "properties":{
+          "id": {
+            "type":["null","string"]
+          },
+          "escalation_delay_in_minutes": { "type": ["null","integer"]},
+          "targets": {
+            "type": ["null","array"],
+            "items": {
+              "type": ["null","object"],
+              "properties": {
+                "id": {
+                  "type": ["null","string"]
+                },
+                "summary":{
+                  "type": ["null","string"]
+                },
+                "type":{
+                  "type": ["null","string"]
+                },
+                "self":{
+                  "type": ["null","string"]
+                },
+                "html_url":{
+                  "type": ["null","string"]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "services": {
+      "type": ["null", "array"],
+      "items": {
+        "type": ["null","object"],
+        "properties": {
+          "id":{
+            "type": ["null","string"]
+          },
+          "type":{
+            "type": ["null","string"]
+          },
+          "summary":{
+            "type": ["null","string"]
+          },
+          "self":{
+            "type": ["null","string"]
+          },
+          "html_url":{
+            "type": ["null","string"]
+          }
+        }
+      }
+    },
+    "teams": {
+      "type": ["null", "array"],
+      "items": {
+        "type": ["null","object"],
+        "properties": {
+          "id":{
+            "type": ["null","string"]
+          },
+          "type":{
+            "type": ["null","string"]
+          },
+          "summary":{
+            "type": ["null","string"]
+          },
+          "self":{
+            "type": ["null","string"]
+          },
+          "html_url":{
+            "type": ["null","string"]
+          }
+        }
+      }
+    }
+  }
+}
