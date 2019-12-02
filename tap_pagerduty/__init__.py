@@ -1,9 +1,7 @@
-import logging
 import os
 
 import rollbar
 import singer
-from rollbar.logger import RollbarHandler
 
 from .streams import AVAILABLE_STREAMS
 
@@ -14,10 +12,6 @@ if "ROLLBAR_ACCESS_TOKEN" in os.environ:
     ROLLBAR_ACCESS_TOKEN = os.environ["ROLLBAR_ACCESS_TOKEN"]
     ROLLBAR_ENVIRONMENT = os.environ["ROLLBAR_ENVIRONMENT"]
     rollbar.init(ROLLBAR_ACCESS_TOKEN, ROLLBAR_ENVIRONMENT)
-    rollbar_handler = RollbarHandler()
-    # Only send level WARNING and above to Rollbar.
-    rollbar_handler.setLevel(logging.WARNING)
-    LOGGER.addHandler(rollbar_handler)
 
 
 def discover(config, state={}):
@@ -54,13 +48,15 @@ def main():
     if args.discover:
         try:
             discover(config=args.config)
-        except Exception:
+        except:
             LOGGER.exception('Caught exception during Discovery..')
+            rollbar.report_exc_info()
     else:
         try:
             sync(config=args.config, catalog=args.catalog, state=args.state)
-        except Exception:
+        except:
             LOGGER.exception('Caught exception during Sync..')
+            rollbar.report_exc_info()
 
 
 if __name__ == "__main__":

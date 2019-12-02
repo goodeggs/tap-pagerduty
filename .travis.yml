@@ -2,6 +2,11 @@ sudo: false
 dist: xenial
 language: python
 python:
+  - 3.6
   - 3.7
+  - 3.8
 install: pip install tox-travis
-script: make lint
+script: tox
+branches:
+  only:
+    - goodeggs/prod

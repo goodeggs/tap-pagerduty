@@ -4,7 +4,6 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-tap-pagerduty = {editable = true,path = "."}
 
 [dev-packages]
 tap-pagerduty = {path = ".",editable = true}
