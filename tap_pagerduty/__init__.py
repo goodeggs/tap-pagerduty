@@ -8,10 +8,14 @@ from .streams import AVAILABLE_STREAMS
 LOGGER = singer.get_logger()
 
 
-if "ROLLBAR_ACCESS_TOKEN" in os.environ:
+try:
     ROLLBAR_ACCESS_TOKEN = os.environ["ROLLBAR_ACCESS_TOKEN"]
     ROLLBAR_ENVIRONMENT = os.environ["ROLLBAR_ENVIRONMENT"]
     rollbar.init(ROLLBAR_ACCESS_TOKEN, ROLLBAR_ENVIRONMENT)
+    log_to_rollbar = True
+except KeyError:
+    LOGGER.info("No Rollbar environment variables found. Rollbar logging disabled..")
+    log_to_rollbar = False
 
 
 def discover(config, state={}):
@@ -50,13 +54,15 @@ def main():
             discover(config=args.config)
         except:
             LOGGER.exception('Caught exception during Discovery..')
-            rollbar.report_exc_info()
+            if log_to_rollbar is True:
+                rollbar.report_exc_info()
     else:
         try:
             sync(config=args.config, catalog=args.catalog, state=args.state)
         except:
             LOGGER.exception('Caught exception during Sync..')
-            rollbar.report_exc_info()
+            if log_to_rollbar is True:
+                rollbar.report_exc_info()
 
 
 if __name__ == "__main__":

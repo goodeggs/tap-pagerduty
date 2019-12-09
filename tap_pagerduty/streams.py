@@ -1,13 +1,20 @@
 import inspect
 import os
-import time
 from datetime import datetime, timedelta
 from typing import Dict
 
+import backoff
 import requests
 import singer
 
 LOGGER = singer.get_logger()
+
+
+def is_fatal_code(e: requests.exceptions.RequestException) -> bool:
+    '''Helper function to determine if a Requests reponse status code
+    is a "fatal" status code. If it is, the backoff decorator will giveup
+    instead of attemtping to backoff.'''
+    return 400 <= e.response.status_code < 500 and e.response.status_code != 429
 
 
 class PagerdutyStream:
@@ -78,14 +85,15 @@ class PagerdutyStream:
         headers["From"] = self.email
         return headers
 
+    @backoff.on_exception(backoff.fibo,
+                          requests.exceptions.RequestException,
+                          max_time=120,
+                          giveup=is_fatal_code,
+                          logger=LOGGER)
     def _get(self, url_suffix: str, params: Dict = None) -> Dict:
         url = self.BASE_URL + url_suffix
         headers = self._construct_headers()
         response = requests.get(url, headers=headers, params=params)
-        if response.status_code == 429:
-            LOGGER.warn("Rate limit reached. Trying again in 60 seconds.")
-            time.sleep(60)
-            response = requests.get(url, headers=headers, params=params)
         response.raise_for_status()
         return response.json()
 
