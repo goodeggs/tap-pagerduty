@@ -9,7 +9,10 @@ name = "pypi"
 tap-pagerduty = {path = ".",editable = true}
 isort = "*"
 flake8 = "*"
+mypy = "*"
 pytest = "*"
+pytest-datadir = "*"
+responses = "*"
 tox = "*"
 
 [requires]

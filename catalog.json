@@ -381,8 +381,9 @@
           "breadcrumb": [],
           "metadata": {
             "table-key-properties": "id",
-            "selected": true,
+            "selected": false,
             "forced-replication-method": "FULL_TABLE",
+            "valid-replication-keys": [],
             "inclusion": "available"
           }
         },
@@ -570,144 +571,6 @@
           "breadcrumb": [
             "properties",
             "scheduled_actions"
-          ],
-          "metadata": {
-            "inclusion": "available"
-          }
-        }
-      ]
-    },
-    {
-      "tap_stream_id": "notifications",
-      "replication_key": "started_at",
-      "replication_method": "INCREMENTAL",
-      "key_properties": "id",
-      "schema": {
-        "properties": {
-          "id": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "type": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "started_at": {
-            "format": "date-time",
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "address": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "user": {
-            "properties": {
-              "id": {
-                "type": [
-                  "null",
-                  "string"
-                ]
-              },
-              "type": {
-                "type": [
-                  "null",
-                  "string"
-                ]
-              },
-              "summary": {
-                "type": [
-                  "null",
-                  "string"
-                ]
-              },
-              "self": {
-                "type": [
-                  "null",
-                  "string"
-                ]
-              },
-              "html_url": {
-                "type": [
-                  "null",
-                  "string"
-                ]
-              }
-            },
-            "type": [
-              "null",
-              "object"
-            ]
-          }
-        },
-        "type": [
-          "null",
-          "object"
-        ],
-        "additionalProperties": false
-      },
-      "stream": "notifications",
-      "metadata": [
-        {
-          "breadcrumb": [],
-          "metadata": {
-            "table-key-properties": "id",
-            "selected": true,
-            "forced-replication-method": "INCREMENTAL",
-            "valid-replication-keys": [
-              "started_at"
-            ],
-            "inclusion": "available"
-          }
-        },
-        {
-          "breadcrumb": [
-            "properties",
-            "id"
-          ],
-          "metadata": {
-            "inclusion": "automatic"
-          }
-        },
-        {
-          "breadcrumb": [
-            "properties",
-            "type"
-          ],
-          "metadata": {
-            "inclusion": "available"
-          }
-        },
-        {
-          "breadcrumb": [
-            "properties",
-            "started_at"
-          ],
-          "metadata": {
-            "inclusion": "available"
-          }
-        },
-        {
-          "breadcrumb": [
-            "properties",
-            "address"
-          ],
-          "metadata": {
-            "inclusion": "available"
-          }
-        },
-        {
-          "breadcrumb": [
-            "properties",
-            "user"
           ],
           "metadata": {
             "inclusion": "available"
@@ -940,8 +803,9 @@
           "breadcrumb": [],
           "metadata": {
             "table-key-properties": "id",
-            "selected": true,
+            "selected": false,
             "forced-replication-method": "FULL_TABLE",
+            "valid-replication-keys": [],
             "inclusion": "available"
           }
         },
@@ -1996,7 +1860,7 @@
           "breadcrumb": [],
           "metadata": {
             "table-key-properties": "id",
-            "selected": true,
+            "selected": false,
             "forced-replication-method": "FULL_TABLE",
             "valid-replication-keys": [
               "last_status_change_at"
@@ -2206,6 +2070,144 @@
           "breadcrumb": [
             "properties",
             "alerts"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        }
+      ]
+    },
+    {
+      "tap_stream_id": "notifications",
+      "replication_key": "started_at",
+      "replication_method": "INCREMENTAL",
+      "key_properties": "id",
+      "schema": {
+        "properties": {
+          "id": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "type": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "started_at": {
+            "format": "date-time",
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "address": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "user": {
+            "properties": {
+              "id": {
+                "type": [
+                  "null",
+                  "string"
+                ]
+              },
+              "type": {
+                "type": [
+                  "null",
+                  "string"
+                ]
+              },
+              "summary": {
+                "type": [
+                  "null",
+                  "string"
+                ]
+              },
+              "self": {
+                "type": [
+                  "null",
+                  "string"
+                ]
+              },
+              "html_url": {
+                "type": [
+                  "null",
+                  "string"
+                ]
+              }
+            },
+            "type": [
+              "null",
+              "object"
+            ]
+          }
+        },
+        "type": [
+          "null",
+          "object"
+        ],
+        "additionalProperties": false
+      },
+      "stream": "notifications",
+      "metadata": [
+        {
+          "breadcrumb": [],
+          "metadata": {
+            "table-key-properties": "id",
+            "selected": true,
+            "forced-replication-method": "INCREMENTAL",
+            "valid-replication-keys": [
+              "started_at"
+            ],
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "id"
+          ],
+          "metadata": {
+            "inclusion": "automatic"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "type"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "started_at"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "address"
+          ],
+          "metadata": {
+            "inclusion": "available"
+          }
+        },
+        {
+          "breadcrumb": [
+            "properties",
+            "user"
           ],
           "metadata": {
             "inclusion": "available"

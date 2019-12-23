@@ -1,7 +1,7 @@
 import inspect
 import os
 from datetime import datetime, timedelta
-from typing import Dict
+from typing import ClassVar, Dict, List, Optional
 
 import backoff
 import requests
@@ -18,7 +18,8 @@ def is_fatal_code(e: requests.exceptions.RequestException) -> bool:
 
 
 class PagerdutyStream:
-    BASE_URL = "https://api.pagerduty.com"
+    base_url: ClassVar[str] = "https://api.pagerduty.com"
+    tap_stream_id: ClassVar[Optional[str]] = None
 
     def __init__(self, config, state):
         self.config = config
@@ -91,11 +92,12 @@ class PagerdutyStream:
                           giveup=is_fatal_code,
                           logger=LOGGER)
     @backoff.on_exception(backoff.fibo,
-                          requests.exceptions.RequestException,
+                          (requests.exceptions.ConnectionError,
+                           requests.exceptions.Timeout),
                           max_time=120,
                           logger=LOGGER)
     def _get(self, url_suffix: str, params: Dict = None) -> Dict:
-        url = self.BASE_URL + url_suffix
+        url = self.base_url + url_suffix
         headers = self._construct_headers()
         response = requests.get(url, headers=headers, params=params)
         response.raise_for_status()
@@ -146,13 +148,13 @@ class PagerdutyResponse:
 
 
 class IncidentsStream(PagerdutyStream):
-    tap_stream_id = 'incidents'
-    stream = 'incidents'
-    key_properties = 'id'
-    replication_key = 'last_status_change_at'
-    valid_replication_keys = ['last_status_change_at']
-    replication_method = 'FULL_TABLE'
-    valid_params = [
+    tap_stream_id: ClassVar[str] = 'incidents'
+    stream: ClassVar[str] = 'incidents'
+    key_properties: ClassVar[str] = 'id'
+    replication_key: ClassVar[str] = 'last_status_change_at'
+    valid_replication_keys: ClassVar[List[str]] = ['last_status_change_at']
+    replication_method: ClassVar[str] = 'FULL_TABLE'
+    valid_params: ClassVar[List[str]] = [
         'since',
         'until',
         'date_range',
@@ -166,7 +168,7 @@ class IncidentsStream(PagerdutyStream):
         'sort_by',
         'include[]'
     ]
-    required_params = ['until']
+    required_params: ClassVar[List[str]] = ['until']
 
     def __init__(self, config, state, **kwargs):
         super().__init__(config, state)
@@ -237,19 +239,19 @@ class IncidentsStream(PagerdutyStream):
 
 
 class EscalationPoliciesStream(PagerdutyStream):
-    tap_stream_id = 'escalation_policies'
-    stream = 'escalation_policies'
-    key_properties = 'id'
-    valid_replication_keys = []
-    replication_method = 'FULL_TABLE'
-    valid_params = [
+    tap_stream_id: ClassVar[str] = 'escalation_policies'
+    stream: ClassVar[str] = 'escalation_policies'
+    key_properties: ClassVar[str] = 'id'
+    valid_replication_keys: ClassVar[List[str]] = []
+    replication_method: ClassVar[str] = 'FULL_TABLE'
+    valid_params: ClassVar[List[str]] = [
         'user_ids[]',
         'team_ids[]',
         'sort_by',
         'query',
         'include[]',
     ]
-    required_params = []
+    required_params: ClassVar[List[str]] = []
 
     def __init__(self, config, state, **kwargs):
         super().__init__(config, state)
@@ -266,19 +268,19 @@ class EscalationPoliciesStream(PagerdutyStream):
 
 
 class ServicesStream(PagerdutyStream):
-    tap_stream_id = 'services'
-    stream = 'services'
-    key_properties = 'id'
-    valid_replication_keys = []
-    replication_method = 'FULL_TABLE'
-    valid_params = [
+    tap_stream_id: ClassVar[str] = 'services'
+    stream: ClassVar[str] = 'services'
+    key_properties: ClassVar[str] = 'id'
+    valid_replication_keys: ClassVar[List[str]] = []
+    replication_method: ClassVar[str] = 'FULL_TABLE'
+    valid_params: ClassVar[List[str]] = [
         'team_ids[]',
         'time_zone',
         'sort_by',
         'query',
         'include[]',
     ]
-    required_params = []
+    required_params: ClassVar[List[str]] = []
 
     def __init__(self, config, state, **kwargs):
         super().__init__(config, state)
@@ -296,16 +298,16 @@ class ServicesStream(PagerdutyStream):
 
 
 class NotificationsStream(PagerdutyStream):
-    tap_stream_id = 'notifications'
-    stream = 'notifications'
-    key_properties = 'id'
-    replication_key = 'started_at'
-    valid_replication_keys = ['started_at']
-    replication_method = 'INCREMENTAL'
-    valid_params = ['time_zone', 'since', 'until', 'filter', 'include']
-    required_params = ['since', 'until']
+    tap_stream_id: ClassVar[str] = 'notifications'
+    stream: ClassVar[str] = 'notifications'
+    key_properties: ClassVar[str] = 'id'
+    replication_key: ClassVar[str] = 'started_at'
+    valid_replication_keys: ClassVar[List[str]] = ['started_at']
+    replication_method: ClassVar[str] = 'INCREMENTAL'
+    valid_params: ClassVar[List[str]] = ['time_zone', 'since', 'until', 'filter', 'include']
+    required_params: ClassVar[List[str]] = ['since', 'until']
 
-    def __init__(self, config, state):
+    def __init__(self, config, state, **kwargs):
         super().__init__(config, state)
 
     def sync(self):
