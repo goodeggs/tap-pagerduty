@@ -1,4 +1,5 @@
 import os
+import sys
 
 import rollbar
 import singer
@@ -48,22 +49,23 @@ def sync(config, catalog, state={}):
         stream.write_state()
 
 
-def main():
+def _main():
     args = singer.utils.parse_args(required_config_keys=["token", "email", "since"])
     if args.discover:
-        try:
-            discover(config=args.config)
-        except:
-            LOGGER.exception('Caught exception during Discovery..')
-            if log_to_rollbar is True:
-                rollbar.report_exc_info()
+        discover(config=args.config)
     else:
-        try:
-            sync(config=args.config, catalog=args.catalog, state=args.state)
-        except:
-            LOGGER.exception('Caught exception during Sync..')
-            if log_to_rollbar is True:
-                rollbar.report_exc_info()
+        sync(config=args.config, catalog=args.catalog, state=args.state)
+
+
+def main():
+    try:
+        _main()
+    except Exception:
+        if log_to_rollbar is True:
+            LOGGER.info("Reporting exception info to Rollbar..")
+            rollbar.report_exc_info()
+        LOGGER.exception(msg="Uncaught Exception..")
+        sys.exit(1)
 
 
 if __name__ == "__main__":
