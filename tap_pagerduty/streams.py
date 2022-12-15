@@ -297,6 +297,34 @@ class ServicesStream(PagerdutyStream):
                             counter.increment()
 
 
+class MaintenanceWindowsStream(PagerdutyStream):
+    tap_stream_id: ClassVar[str] = 'maintenance_windows'
+    stream: ClassVar[str] = 'maintenance_windows'
+    key_properties: ClassVar[str] = 'id'
+    valid_replication_keys: ClassVar[List[str]] = []
+    replication_method: ClassVar[str] = 'FULL_TABLE'
+    valid_params: ClassVar[List[str]] = [
+        'sort_by',
+        'query',
+        'include[]',
+    ]
+    required_params: ClassVar[List[str]] = []
+
+    def __init__(self, config, state, **kwargs):
+        super().__init__(config, state)
+
+    def sync(self):
+
+        with singer.metrics.job_timer(job_type=f"list_{self.tap_stream_id}"):
+            with singer.metrics.record_counter(endpoint=self.tap_stream_id) as counter:
+                for page in self._list_resource(url_suffix=f"/{self.tap_stream_id}", params=self.params):
+                    for record in page.get(self.tap_stream_id):
+                        with singer.Transformer() as transformer:
+                            transformed_record = transformer.transform(data=record, schema=self.schema)
+                            singer.write_record(stream_name=self.stream, time_extracted=singer.utils.now(), record=transformed_record)
+                            counter.increment()
+
+
 class NotificationsStream(PagerdutyStream):
     tap_stream_id: ClassVar[str] = 'notifications'
     stream: ClassVar[str] = 'notifications'
@@ -358,5 +386,6 @@ AVAILABLE_STREAMS = {
     IncidentsStream,
     ServicesStream,
     NotificationsStream,
-    EscalationPoliciesStream
+    EscalationPoliciesStream,
+    MaintenanceWindowsStream,
 }
