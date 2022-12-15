@@ -1,0 +1,105 @@
+{
+  "type": ["null", "object"],
+  "additionalProperties": false,
+
+  "properties": {
+    "id": {
+      "type": ["null", "string"]
+    },
+    "type": {
+      "type": ["null", "string"]
+    },
+    "summary": {
+      "type": ["null", "string"]
+    },
+    "self": {
+      "type": ["null", "string"]
+    },
+    "html_url": {
+      "type": ["null", "string"]
+    },
+    "sequence_number": {
+      "type": ["null", "integer"]
+    },
+    "start_time": {
+      "type": ["null", "string"],
+      "format": "date-time"
+    },
+    "end_time": {
+      "type": ["null", "string"],
+      "format": "date-time"
+    },
+    "description": {
+      "type": ["null", "string"]
+    },
+
+    "services": {
+      "type": ["null", "array"],
+      "items": {
+        "type": ["null", "object"],
+        "properties": {
+          "id": {
+            "type": ["null", "string"]
+          },
+          "type": {
+            "type": ["null", "string"]
+          },
+          "summary": {
+            "type": ["null", "string"]
+          },
+          "self": {
+            "type": ["null", "string"]
+          },
+          "html_url": {
+            "type": ["null", "string"]
+          }
+        }
+      }
+    },
+
+    "teams": {
+      "type": ["null", "array"],
+      "items": {
+        "type": ["null", "object"],
+        "properties": {
+          "id": {
+            "type": ["null", "string"]
+          },
+          "type": {
+            "type": ["null", "string"]
+          },
+          "summary": {
+            "type": ["null", "string"]
+          },
+          "self": {
+            "type": ["null", "string"]
+          },
+          "html_url": {
+            "type": ["null", "string"]
+          }
+        }
+      }
+    },
+
+    "created_by": {
+      "type": ["null", "object"],
+      "properties": {
+        "id": {
+          "type": ["null", "string"]
+        },
+        "type": {
+          "type": ["null", "string"]
+        },
+        "summary": {
+          "type": ["null", "string"]
+        },
+        "self": {
+          "type": ["null", "string"]
+        },
+        "html_url": {
+          "type": ["null", "string"]
+        }
+      }
+    }
+  }
+}
